@@ -1,0 +1,7 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    username: ${DB_USER_ANALITICA:biohub_analitica}
+    password: ${DB_PASSWORD_ANALITICA}

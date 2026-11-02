@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: ${DB_USER_INTERNA:biohub_interna}
+    password: ${DB_PASSWORD_INTERNA}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true

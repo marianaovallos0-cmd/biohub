@@ -1,3 +1,20 @@
 spring:
   application:
     name: biohub
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/biohub}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    redis:
+      enabled: false

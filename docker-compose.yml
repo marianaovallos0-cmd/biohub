@@ -1,0 +1,88 @@
+name: biohub
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: biohub
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD}
+      DB_PASSWORD_INTERNA: ${DB_PASSWORD_INTERNA}
+      DB_PASSWORD_PUBLICA: ${DB_PASSWORD_PUBLICA}
+      DB_PASSWORD_ANALITICA: ${DB_PASSWORD_ANALITICA}
+    ports:
+      - "5433:5432"
+    volumes:
+      - datos-db:/var/lib/postgresql/data
+      - ./infra/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d biohub"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  migraciones:
+    image: flyway/flyway:11
+    command: >
+      -url=jdbc:postgresql://db:5432/biohub
+      -user=postgres -password=${DB_ADMIN_PASSWORD}
+      -locations=filesystem:/flyway/sql,filesystem:/flyway/dev
+      migrate
+    volumes:
+      - ./backend/src/main/resources/db/migration:/flyway/sql:ro
+      - ./infra/db/dev:/flyway/dev:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api-interna:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: interna
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_INTERNA: ${DB_PASSWORD_INTERNA}
+    volumes:
+      - evidencias:/data/evidencias
+    ports:
+      - "8081:8081"
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  api-publica:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: publica
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_PUBLICA: ${DB_PASSWORD_PUBLICA}
+      REDIS_HOST: redis
+    deploy:
+      replicas: 2
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  analitica:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: analitica
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_ANALITICA: ${DB_PASSWORD_ANALITICA}
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  datos-db:
+  evidencias:

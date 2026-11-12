@@ -112,6 +112,20 @@ Regla: `web → aplicacion → dominio ← infraestructura`.
 - Un controlador nunca llama a un repositorio directo. Siempre pasa por un caso de uso.
 - Los casos de uso dependen de la interfaz del repositorio, no de JPA. Así se pueden probar con dobles.
 
+### Cómo proteger un endpoint (HU-12)
+
+Todo lo que está en `/interno/**` pide login. Además, cada acción dice qué permiso necesita:
+
+```java
+@PreAuthorize("@autorizacion.validarAcceso(principal, 'REGISTRAR_HALLAZGO')")
+@PostMapping
+public RespuestaHallazgo registrar(@AuthenticationPrincipal UsuarioAutenticado usuario, ...) { ... }
+```
+
+- Si el rol no tiene el permiso, responde 403 y no entra al caso de uso.
+- `@AuthenticationPrincipal UsuarioAutenticado usuario` te da quién hizo la petición (id, nombre, rol, permisos).
+- Los códigos de permiso están en `infra/db/dev/R__datos_prueba.sql`.
+
 ### Base de datos
 
 - Las tablas se crean con Flyway: `backend/src/main/resources/db/migration`.

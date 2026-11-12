@@ -28,3 +28,7 @@ export async function pedir<T>(ruta: string, opciones: RequestInit = {}): Promis
   }
   return respuesta.json() as Promise<T>;
 }
+
+export function tieneToken() {
+  return sessionStorage.getItem(CLAVE_TOKEN) !== null;
+}

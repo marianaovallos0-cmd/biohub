@@ -6,6 +6,7 @@ import LayoutInterno from '@/layouts/LayoutInterno';
 import BusquedaPublica from '@/paginas/BusquedaPublica';
 import Login from '@/paginas/Login';
 import InicioInterno from '@/paginas/InicioInterno';
+import IntentosAcceso from '@/paginas/IntentosAcceso';
 
 export default function App() {
   return (
@@ -22,6 +23,12 @@ export default function App() {
           <Route element={<RutaProtegida />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno" element={<InicioInterno />} />
+            </Route>
+          </Route>
+
+          <Route element={<RutaProtegida roles={['AUDITOR']} />}>
+            <Route element={<LayoutInterno />}>
+              <Route path="/interno/intentos" element={<IntentosAcceso />} />
             </Route>
           </Route>
         </Routes>

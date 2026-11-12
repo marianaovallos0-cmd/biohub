@@ -47,6 +47,7 @@ services:
       SPRING_PROFILES_ACTIVE: interna
       DB_URL: jdbc:postgresql://db:5432/biohub
       DB_PASSWORD_INTERNA: ${DB_PASSWORD_INTERNA}
+      JWT_SECRETO: ${JWT_SECRETO}
     volumes:
       - evidencias:/data/evidencias
     depends_on:

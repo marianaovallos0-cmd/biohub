@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Leaf, Search } from 'lucide-react';
+import { Leaf, MapPin, Search, ShieldCheck } from 'lucide-react';
 import { pedir } from '@/api/cliente';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,33 +78,76 @@ export default function BusquedaPublica() {
     setParametros({ q: limpio });
   }
 
+  function buscarEjemplo(ejemplo: string) {
+    setAviso(null);
+    setParametros({ q: ejemplo });
+  }
+
   return (
-    <div className="flex flex-col gap-6">
-      <section className="flex flex-col gap-2">
-        <h1 className="text-3xl font-extrabold tracking-tight text-bosque">Buscar especies y hallazgos</h1>
-        <p className="text-muted-foreground">
-          Consulta los hallazgos biológicos registrados en BioHub por nombre de especie.
-          Por protección de las especies no se muestran coordenadas exactas.
+    <div className="flex flex-col gap-8">
+      {/* La franja verde ocupa todo el ancho y sigue desde el encabezado */}
+      <section className="relative -mt-8 mx-[calc(50%-50vw)] overflow-hidden bg-bosque text-white">
+        <Leaf aria-hidden="true" className="absolute right-[8%] -top-10 size-64 rotate-12 text-brote/10" />
+        <Leaf aria-hidden="true" className="absolute -bottom-16 left-[6%] size-44 -rotate-45 text-brote/10" />
+
+        <div className="relative mx-auto max-w-[1120px] px-6 pb-14 pt-10">
+        <div className="relative flex max-w-2xl flex-col gap-3">
+          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Buscar especies y hallazgos</h1>
+          <p className="text-white/75">
+            Consulta los hallazgos biológicos registrados en BioHub por nombre de especie.
+          </p>
+        </div>
+
+        <form role="search" onSubmit={enviar} className="relative mt-6 flex flex-col gap-3 sm:flex-row">
+          <label htmlFor="busqueda" className="sr-only">Nombre de la especie</label>
+          <Input
+            id="busqueda"
+            type="search"
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="Ej: Ara macao, Oophaga, gryphus"
+            maxLength={100}
+            autoFocus
+            className="h-12 border-transparent bg-white text-base text-foreground"
+          />
+          <Button type="submit" disabled={cargando} className="h-12 bg-brote px-7 font-bold text-bosque hover:bg-brote/90">
+            <Search aria-hidden="true" />
+            {cargando ? 'Buscando…' : 'Buscar'}
+          </Button>
+        </form>
+
+        <div className="relative mt-4 flex flex-wrap items-center gap-2 text-sm text-white/75">
+          <span>Prueba con:</span>
+          {['Ara macao', 'Oophaga histrionica', 'Vultur gryphus'].map((ejemplo) => (
+            <button
+              key={ejemplo}
+              type="button"
+              onClick={() => buscarEjemplo(ejemplo)}
+              className="rounded-full border border-white/20 px-3 py-1 italic hover:bg-white/10"
+            >
+              {ejemplo}
+            </button>
+          ))}
+        </div>
+
+        <p className="relative mt-6 flex items-center gap-2 text-sm text-brote">
+          <ShieldCheck aria-hidden="true" className="size-4" />
+          Por protección de las especies no se muestran coordenadas exactas, solo la región y el departamento.
         </p>
+        </div>
       </section>
 
-      <form role="search" onSubmit={enviar} className="flex flex-col gap-3 sm:flex-row">
-        <label htmlFor="busqueda" className="sr-only">Nombre de la especie</label>
-        <Input
-          id="busqueda"
-          type="search"
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          placeholder="Ej: Ara macao, Oophaga, gryphus"
-          maxLength={100}
-          autoFocus
-          className="h-11 bg-card text-base"
-        />
-        <Button type="submit" disabled={cargando} className="h-11 px-6">
-          <Search aria-hidden="true" />
-          {cargando ? 'Buscando…' : 'Buscar'}
-        </Button>
-      </form>
+      {!consultaValida && !error && (
+        <Empty className="rounded-3xl border bg-card">
+          <EmptyHeader>
+            <EmptyMedia variant="icon"><Leaf /></EmptyMedia>
+            <EmptyTitle>Escribe el nombre de una especie para empezar</EmptyTitle>
+            <EmptyDescription>
+              Puedes buscar por el nombre científico completo, solo el género o solo la especie.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
 
       {error && (
         <Alert variant="destructive">
@@ -115,7 +158,7 @@ export default function BusquedaPublica() {
 
       {respuesta && !error && (
         respuesta.total === 0 ? (
-          <Empty className="border bg-card">
+          <Empty className="rounded-3xl border bg-card">
             <EmptyHeader>
               <EmptyMedia variant="icon"><Leaf /></EmptyMedia>
               <EmptyTitle>Sin resultados</EmptyTitle>
@@ -126,9 +169,9 @@ export default function BusquedaPublica() {
             </EmptyHeader>
           </Empty>
         ) : (
-          <Card>
+          <Card className="rounded-3xl">
             <CardHeader>
-              <CardTitle>Resultados</CardTitle>
+              <CardTitle className="text-xl font-extrabold text-bosque">Resultados</CardTitle>
               <CardDescription aria-live="polite">
                 {respuesta.total} {respuesta.total === 1 ? 'hallazgo' : 'hallazgos'} para “{respuesta.consulta}”
               </CardDescription>
@@ -151,9 +194,12 @@ export default function BusquedaPublica() {
                       <TableCell><Badge variant="secondary">{r.tipoEspecie}</Badge></TableCell>
                       <TableCell>{r.familia ?? '—'}</TableCell>
                       <TableCell>
-                        {r.departamento
-                          ? `${r.departamento}${r.region ? ` · ${r.region}` : ''}`
-                          : 'Sin ubicación'}
+                        {r.departamento ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <MapPin aria-hidden="true" className="size-4 text-muted-foreground" />
+                            {r.departamento}{r.region ? ` · ${r.region}` : ''}
+                          </span>
+                        ) : 'Sin ubicación'}
                       </TableCell>
                       <TableCell className="whitespace-nowrap">{formatoFecha.format(new Date(r.fechaRegistro))}</TableCell>
                     </TableRow>

@@ -11,6 +11,8 @@ import org.springframework.http.HttpMethod;
 import co.edu.unbosque.biohub.interna.seguridad.infraestructura.ConvertidorJwt;
 import co.edu.unbosque.biohub.interna.seguridad.web.ManejadorAccesoDenegado;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import java.time.Clock;
+import java.time.ZoneId;
 
 @Configuration
 @Profile("interna")
@@ -33,5 +35,10 @@ public class PerfilInternaConfig {
                 .accessDeniedHandler(accesoDenegado)
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(convertidorJwt)));
         return http.build();
+    }
+
+    @Bean
+    Clock reloj() {
+        return Clock.system(ZoneId.of("America/Bogota"));
     }
 }

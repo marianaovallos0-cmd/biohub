@@ -1,5 +1,6 @@
 package co.edu.unbosque.biohub.interna.seguridad.web;
 
+import co.edu.unbosque.biohub.interna.seguridad.dominio.RepositorioIntentos;
 import co.edu.unbosque.biohub.interna.seguridad.dominio.RepositorioUsuarios;
 import co.edu.unbosque.biohub.interna.seguridad.dominio.Usuario;
 import com.jayway.jsonpath.JsonPath;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static co.edu.unbosque.biohub.interna.seguridad.DatosDePrueba.CLAVE;
@@ -64,6 +64,9 @@ class SeguridadInternaTest {
 
     @MockitoBean
     RepositorioUsuarios repositorio;
+
+    @MockitoBean
+    RepositorioIntentos repositorioIntentos;
 
     private Usuario camila;
     private Usuario laura;

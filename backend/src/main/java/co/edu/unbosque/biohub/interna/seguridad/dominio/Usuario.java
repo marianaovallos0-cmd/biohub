@@ -40,6 +40,12 @@ public class Usuario {
         return activo && rol.tienePermiso(codigo);
     }
 
+    public void activar() { this.activo = true; }
+
+    public void desactivar() { this.activo = false; }
+
+    public void cambiarRol(Rol nuevoRol) { this.rol = nuevoRol; }
+
     public UUID getId() {
         return id;
     }

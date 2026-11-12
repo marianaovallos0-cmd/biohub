@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+biohub:
+  jwt:
+    secreto: ${JWT_SECRETO}
+    duracion: 1h

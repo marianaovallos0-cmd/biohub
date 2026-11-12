@@ -7,20 +7,25 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
+import co.edu.unbosque.biohub.interna.seguridad.infraestructura.ConvertidorJwt;
 
 @Configuration
 @Profile("interna")
 @ComponentScan("co.edu.unbosque.biohub.interna")
 public class PerfilInternaConfig {
 
-    @Bean
-    SecurityFilterChain seguridadInterna(HttpSecurity http) throws Exception {
+   @Bean
+    SecurityFilterChain seguridadInterna(HttpSecurity http, ConvertidorJwt convertidorJwt) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health", "/actuator/health/**", "/error").permitAll()
-                .anyRequest().authenticated());
+                .requestMatchers(HttpMethod.POST, "/interno/auth/login").permitAll()
+                .anyRequest().authenticated())
+            .oauth2ResourceServer(oauth -> oauth
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(convertidorJwt)));
         return http.build();
     }
 }

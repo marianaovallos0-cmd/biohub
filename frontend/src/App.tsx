@@ -3,6 +3,7 @@ import { SesionProvider } from '@/auth/SesionContext';
 import { RutaProtegida } from '@/auth/RutaProtegida';
 import LayoutPublico from '@/layouts/LayoutPublico';
 import LayoutInterno from '@/layouts/LayoutInterno';
+import BusquedaPublica from '@/paginas/BusquedaPublica';
 
 export default function App() {
   return (
@@ -11,7 +12,7 @@ export default function App() {
         <Routes>
           {/* Zona pública: sin login (api-pública). Aquí van las páginas de HU-09 y HU-10 */}
           <Route element={<LayoutPublico />}>
-            <Route path="/" element={null} />
+            <Route path="/" element={<BusquedaPublica />} />
           </Route>
 
           {/* Zona interna: con login (api-interna). Cada HU agrega su página aquí */}

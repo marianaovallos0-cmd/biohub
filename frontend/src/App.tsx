@@ -4,6 +4,7 @@ import { RutaProtegida } from '@/auth/RutaProtegida';
 import LayoutPublico from '@/layouts/LayoutPublico';
 import LayoutInterno from '@/layouts/LayoutInterno';
 import BusquedaPublica from '@/paginas/BusquedaPublica';
+import FichaPublica from '@/paginas/FichaPublica';
 import Login from '@/paginas/Login';
 import InicioInterno from '@/paginas/InicioInterno';
 import IntentosAcceso from '@/paginas/IntentosAcceso';
@@ -16,6 +17,7 @@ export default function App() {
           {/* Zona pública: sin login (api-pública). Aquí van las páginas de HU-09 y HU-10 */}
           <Route element={<LayoutPublico />}>
             <Route path="/" element={<BusquedaPublica />} />
+            <Route path="/fichas/:hallazgoId" element={<FichaPublica />} />
             <Route path="/login" element={<Login />} />
           </Route>
 

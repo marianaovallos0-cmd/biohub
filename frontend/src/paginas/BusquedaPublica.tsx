@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Leaf, MapPin, Search, ShieldCheck } from 'lucide-react';
 import { pedir } from '@/api/cliente';
 import { Button } from '@/components/ui/button';
@@ -190,7 +190,15 @@ export default function BusquedaPublica() {
                 <TableBody>
                   {respuesta.resultados.map((r) => (
                     <TableRow key={r.hallazgoId}>
-                      <TableCell className="font-semibold italic text-bosque">{r.nombreCientifico}</TableCell>
+                      <TableCell className="font-semibold italic text-bosque">
+                        <Link
+                          to={`/fichas/${r.hallazgoId}`}
+                          state={{ busqueda: respuesta.consulta }}
+                          className="hover:underline"
+                        >
+                          {r.nombreCientifico}
+                        </Link>
+                      </TableCell>
                       <TableCell><Badge variant="secondary">{r.tipoEspecie}</Badge></TableCell>
                       <TableCell>{r.familia ?? '—'}</TableCell>
                       <TableCell>

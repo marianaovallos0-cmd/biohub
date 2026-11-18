@@ -37,7 +37,13 @@ public class ConsultarDatosExternos {
         if (tamano < 1 || tamano > TAMANO_MAXIMO) {
             throw new PaginaInvalidaException("El tamaño debe estar entre 1 y " + TAMANO_MAXIMO + ".");
         }
-        return List.copyOf(datos.listar(pagina * tamano, tamano));
+        int desde;
+        try {
+            desde = Math.multiplyExact(pagina, tamano);
+        } catch (ArithmeticException e) {
+            throw new PaginaInvalidaException("La página es demasiado grande.");
+        }
+        return List.copyOf(datos.listar(desde, tamano));
     }
 
     @Cacheable(cacheNames = CACHE_HALLAZGO, key = "#hallazgoId")

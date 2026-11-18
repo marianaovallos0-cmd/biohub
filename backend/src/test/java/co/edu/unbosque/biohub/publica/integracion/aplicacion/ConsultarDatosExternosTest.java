@@ -63,6 +63,8 @@ class ConsultarDatosExternosTest {
         assertThatThrownBy(() -> consultar.listar(0, 0)).isInstanceOf(PaginaInvalidaException.class);
         assertThatThrownBy(() -> consultar.listar(0, ConsultarDatosExternos.TAMANO_MAXIMO + 1))
                 .isInstanceOf(PaginaInvalidaException.class);
+        assertThatThrownBy(() -> consultar.listar(Integer.MAX_VALUE, 500))
+        .isInstanceOf(PaginaInvalidaException.class);
     }
 
     @Test

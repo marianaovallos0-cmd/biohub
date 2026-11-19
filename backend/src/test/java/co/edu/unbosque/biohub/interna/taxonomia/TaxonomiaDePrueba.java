@@ -74,5 +74,11 @@ public final class TaxonomiaDePrueba {
         public void guardar(FichaTaxonomica ficha) {
             guardadas.add(ficha);
         }
+
+        @Override
+        public Optional<FichaTaxonomica> buscarVigente(UUID hallazgoId) {
+            return guardadas.stream().filter(f -> f.getHallazgoId().equals(hallazgoId))
+                    .max(java.util.Comparator.comparingInt(FichaTaxonomica::getNumeroVersion));
+        }
     }
 }

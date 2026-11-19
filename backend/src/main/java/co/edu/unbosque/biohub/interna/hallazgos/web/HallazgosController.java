@@ -2,9 +2,11 @@ package co.edu.unbosque.biohub.interna.hallazgos.web;
 
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.ArchivoEvidencia;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.ArchivoSubido;
+import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.ConsultarMisHallazgos;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.DescargarEvidencia;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.EvidenciaSubida;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.HallazgoRegistrado;
+import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.MiHallazgo;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.RegistrarHallazgo;
 import co.edu.unbosque.biohub.interna.hallazgos.aplicacion.SolicitudRegistro;
 import co.edu.unbosque.biohub.interna.hallazgos.dominio.AccesoEvidenciaDenegadoException;
@@ -38,9 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * HU-01. Ruta interna, con login y permiso REGISTRAR_HALLAZGO.
- */
+// HU-01. Ruta interna, con login y permiso REGISTRAR_HALLAZGO.
 @RestController
 @RequestMapping("/interno")
 public class HallazgosController {
@@ -49,10 +49,13 @@ public class HallazgosController {
 
     private final RegistrarHallazgo registrarHallazgo;
     private final DescargarEvidencia descargarEvidencia;
+    private final ConsultarMisHallazgos consultarMisHallazgos;
 
-    public HallazgosController(RegistrarHallazgo registrarHallazgo, DescargarEvidencia descargarEvidencia) {
+    public HallazgosController(RegistrarHallazgo registrarHallazgo, DescargarEvidencia descargarEvidencia,
+                               ConsultarMisHallazgos consultarMisHallazgos) {
         this.registrarHallazgo = registrarHallazgo;
         this.descargarEvidencia = descargarEvidencia;
+        this.consultarMisHallazgos = consultarMisHallazgos;
     }
 
     @PostMapping(path = "/hallazgos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -68,6 +71,13 @@ public class HallazgosController {
                         evidencias(datos, archivosEvidencia), archivosDeAtributos(peticion)),
                 usuario);
         return ResponseEntity.created(URI.create("/interno/hallazgos/" + registrado.id())).body(registrado);
+    }
+
+    // Criterio 2: los hallazgos del investigador que inició sesión, con sus evidencias
+    @GetMapping("/hallazgos/mios")
+    @PreAuthorize("@autorizacion.validarAcceso(principal, 'REGISTRAR_HALLAZGO')")
+    public List<MiHallazgo> mios(@AuthenticationPrincipal UsuarioAutenticado usuario) {
+        return consultarMisHallazgos.ejecutar(usuario);
     }
 
     @GetMapping("/evidencias/{id}")

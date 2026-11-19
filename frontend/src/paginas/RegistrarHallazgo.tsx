@@ -7,6 +7,8 @@ import {
   DEPARTAMENTOS,
   FORMATOS_EVIDENCIA,
   MAXIMO_BYTES,
+  MAXIMO_EVIDENCIAS,
+  MAXIMO_TOTAL_BYTES,
   NOMBRE_EVIDENCIA,
   registrarHallazgo,
   type HallazgoRegistrado,
@@ -134,6 +136,9 @@ export default function RegistrarHallazgo() {
     Object.values(archivosAtributos).forEach((archivo) => {
       if (archivo.size > MAXIMO_BYTES) problemas.push(`Archivo ${archivo.name}: pesa más de 10 MB.`);
     });
+    const todos = [...evidencias.map((e) => e.archivo), ...Object.values(archivosAtributos)];
+    const total = todos.reduce((suma, archivo) => suma + (archivo?.size ?? 0), 0);
+    if (total > MAXIMO_TOTAL_BYTES) problemas.push('Entre todos, los archivos pesan más de 60 MB. Quita alguno o usa archivos más livianos.');
     return problemas;
   }
 
@@ -168,8 +173,9 @@ export default function RegistrarHallazgo() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       if (error instanceof ErrorApi && error.errores.length > 0) setErrores(error.errores);
-      else if (error instanceof ErrorApi && error.estado === 413) setErrores(['Los archivos pesan demasiado. Cada uno puede pesar máximo 10 MB.']);
+      else if (error instanceof ErrorApi && error.estado === 413) setErrores(['Los archivos pesan demasiado: máximo 10 MB cada uno y 60 MB entre todos.']);
       else if (error instanceof ErrorApi && error.estado === 403) setErrores(['Tu rol no tiene permiso para registrar hallazgos.']);
+      else if (error instanceof ErrorApi && error.estado === 400) setErrores(['Hay datos que el sistema no pudo leer. Revisa el formulario e intenta de nuevo.']);
       else setErrores(['No pudimos guardar el hallazgo. Revisa tu conexión e intenta de nuevo.']);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
@@ -370,7 +376,9 @@ export default function RegistrarHallazgo() {
       <Card className="rounded-3xl">
         <CardHeader>
           <CardTitle className="text-xl font-extrabold text-bosque">4. Evidencias</CardTitle>
-          <CardDescription>Fotos, muestras, notas de campo o audios. Máximo 10 MB cada archivo.</CardDescription>
+          <CardDescription>
+            Fotos, muestras, notas de campo o audios. Máximo {MAXIMO_EVIDENCIAS} evidencias, de 10 MB cada una.
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           {evidencias.length === 0 && (
@@ -406,7 +414,8 @@ export default function RegistrarHallazgo() {
               </Button>
             </fieldset>
           ))}
-          <Button type="button" variant="outline" onClick={agregarEvidencia} className="h-11 w-fit px-5">
+          <Button type="button" variant="outline" onClick={agregarEvidencia} className="h-11 w-fit px-5"
+                  disabled={evidencias.length >= MAXIMO_EVIDENCIAS}>
             <Paperclip aria-hidden="true" />
             Adjuntar evidencia
           </Button>

@@ -30,13 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * HU-01. Registra el hallazgo con su ficha (versión 1), su ubicación y sus evidencias.
- */
+// HU-01. Registra el hallazgo con su ficha (versión 1), su ubicación y sus evidencias.
 @Service
 public class RegistrarHallazgo {
 
-    static final int MAXIMO_EVIDENCIAS = 20;
+    // 5 de 10 MB más los archivos de la ficha caben en los 60 MB que dejan pasar Nginx y Spring
+    static final int MAXIMO_EVIDENCIAS = 5;
 
     private static final Logger log = LoggerFactory.getLogger(RegistrarHallazgo.class);
 
@@ -108,6 +107,7 @@ public class RegistrarHallazgo {
         // Los atributos de tipo ARCHIVO guardan la ruta del archivo como valor; el formato lo valida la ficha
         DatosFicha datosFicha = solicitud.ficha();
         Map<String, ArchivoSubido> archivosPorRuta = new LinkedHashMap<>();
+        Map<UUID, String> rutasAtributos = new LinkedHashMap<>();
         for (Map.Entry<UUID, ArchivoSubido> entrada : solicitud.archivosAtributos().entrySet()) {
             ArchivoSubido archivo = entrada.getValue();
             List<String> erroresTamano = ReglasArchivos.erroresDeTamano("Archivo " + archivo.nombreOriginal(), archivo.tamanoBytes());
@@ -115,7 +115,7 @@ public class RegistrarHallazgo {
             if (erroresTamano.isEmpty() && datosFicha != null) {
                 String ruta = almacen.nuevaRuta(ReglasArchivos.extension(archivo.nombreOriginal()));
                 archivosPorRuta.put(ruta, archivo);
-                datosFicha = datosFicha.conValor(entrada.getKey(), ruta);
+                rutasAtributos.put(entrada.getKey(), ruta);
             }
         }
 
@@ -123,7 +123,7 @@ public class RegistrarHallazgo {
                 Hallazgo.expedicionValida(solicitud.expedicion()) ? solicitud.expedicion() : null, autor.id(), ahora);
         FichaTaxonomica ficha = null;
         try {
-            ficha = fichas.armar(hallazgo.getId(), 1, datosFicha);
+            ficha = fichas.armar(hallazgo.getId(), 1, datosFicha, rutasAtributos);
         } catch (FichaInvalidaException e) {
             errores.addAll(e.getErrores());
         }

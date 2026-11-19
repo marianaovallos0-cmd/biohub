@@ -50,7 +50,7 @@ public class Ubicacion {
         this.especieProtegida = especieProtegida;
     }
 
-    /** Lo que impide guardar la ubicación. Vacío si todo está bien. */
+    // Lo que impide guardar la ubicación. Vacío si todo está bien.
     public static List<String> errores(Double latitud, Double longitud, String region, String departamento) {
         List<String> errores = new ArrayList<>();
         if (latitud == null || latitud.isNaN() || latitud < -90 || latitud > 90) {
@@ -59,13 +59,20 @@ public class Ubicacion {
         if (longitud == null || longitud.isNaN() || longitud < -180 || longitud > 180) {
             errores.add("La longitud debe estar entre -180 y 180.");
         }
-        if (region == null || region.isBlank() || region.trim().length() > LARGO_MAXIMO) {
-            errores.add("Falta la región.");
-        }
-        if (departamento == null || departamento.isBlank() || departamento.trim().length() > LARGO_MAXIMO) {
-            errores.add("Falta el departamento.");
-        }
+        errores.addAll(erroresTexto("la región", region));
+        errores.addAll(erroresTexto("el departamento", departamento));
         return errores;
+    }
+
+    private static List<String> erroresTexto(String campo, String valor) {
+        if (valor == null || valor.isBlank()) {
+            return List.of("Falta " + campo + ".");
+        }
+        if (valor.trim().length() > LARGO_MAXIMO) {
+            String sujeto = Character.toUpperCase(campo.charAt(0)) + campo.substring(1);
+            return List.of(sujeto + " tiene más de " + LARGO_MAXIMO + " caracteres.");
+        }
+        return List.of();
     }
 
     public UUID getId() { return id; }

@@ -214,6 +214,29 @@ class RegistrarHallazgoTest {
     }
 
     @Test
+    void seAceptanMaximo5Evidencias() {
+        List<EvidenciaSubida> seis = java.util.stream.IntStream.rangeClosed(1, 6)
+                .mapToObj(i -> new EvidenciaSubida(TipoEvidencia.FOTOGRAFIA, null, archivo("rana" + i + ".jpg", "foto")))
+                .toList();
+
+        HallazgoInvalidoException error = assertThrows(HallazgoInvalidoException.class, () -> registrar.ejecutar(
+                new SolicitudRegistro(null, ranaCompleta(), choco(), seis, Map.of()), laura));
+
+        assertThat(error.getErrores()).containsExactly("Se pueden adjuntar máximo 5 evidencias por hallazgo.");
+        sinNadaGuardado();
+    }
+
+    @Test
+    void unDepartamentoMuyLargoDiceQueEsMuyLargoYNoQueFalta() {
+        DatosUbicacion larga = new DatosUbicacion(5.69, -76.66, "Pacífica", "x".repeat(101), false);
+
+        HallazgoInvalidoException error = assertThrows(HallazgoInvalidoException.class, () -> registrar.ejecutar(
+                new SolicitudRegistro(null, ranaCompleta(), larga, List.of(), Map.of()), laura));
+
+        assertThat(error.getErrores()).containsExactly("El departamento tiene más de 100 caracteres.");
+    }
+
+    @Test
     void unaEvidenciaSinArchivoSeRechaza() {
         List<EvidenciaSubida> adjuntas = List.of(new EvidenciaSubida(TipoEvidencia.FOTOGRAFIA, null, null));
 

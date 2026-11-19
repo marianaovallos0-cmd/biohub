@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-/** Dobles tipo fake de HU-01: guardan en listas y en un mapa en vez de PostgreSQL y del disco. */
+// Dobles tipo fake de HU-01: guardan en listas y en un mapa en vez de PostgreSQL y del disco.
 public final class HallazgosDePrueba {
 
     private HallazgosDePrueba() { }
@@ -31,7 +31,7 @@ public final class HallazgosDePrueba {
         return new ArchivoSubido(nombre, bytes.length, () -> new ByteArrayInputStream(bytes));
     }
 
-    /** Un archivo que dice pesar "bytes" sin ocupar esa memoria; si alguien lo abre, la prueba falla. */
+    // Un archivo que dice pesar "bytes" sin ocupar esa memoria; si alguien lo abre, la prueba falla.
     public static ArchivoSubido archivoQueNoSeDebeAbrir(String nombre, long bytes) {
         return new ArchivoSubido(nombre, bytes, () -> {
             throw new AssertionError("No se debía leer " + nombre);
@@ -58,6 +58,13 @@ public final class HallazgosDePrueba {
         public Optional<Hallazgo> buscarPorId(UUID id) {
             return guardados.stream().filter(h -> h.getId().equals(id)).findFirst();
         }
+
+        @Override
+        public List<Hallazgo> listarPorInvestigador(UUID investigadorId) {
+            return guardados.stream().filter(h -> h.esAutor(investigadorId))
+                    .sorted(java.util.Comparator.comparing(Hallazgo::getFechaRegistro).reversed())
+                    .toList();
+        }
     }
 
     public static class RepositorioEvidenciasFalso implements RepositorioEvidencias {
@@ -75,6 +82,11 @@ public final class HallazgosDePrueba {
         @Override
         public Optional<Evidencia> buscarPorId(UUID id) {
             return guardadas.stream().filter(e -> e.getId().equals(id)).findFirst();
+        }
+
+        @Override
+        public List<Evidencia> listarPorHallazgo(UUID hallazgoId) {
+            return guardadas.stream().filter(e -> e.getHallazgoId().equals(hallazgoId)).toList();
         }
     }
 

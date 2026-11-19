@@ -241,6 +241,32 @@ class HallazgosControllerTest {
         verify(almacen, never()).leer(anyString());
     }
 
+    // Criterio 2: el investigador vuelve a encontrar sus evidencias después de guardar
+    @Test
+    void elInvestigadorConsultaSusHallazgosConSusEvidencias() throws Exception {
+        Hallazgo hallazgo = new Hallazgo("Expedición Atrato 2026", laura.getId(), OffsetDateTime.parse("2026-11-13T10:00-05:00"));
+        Evidencia foto = HallazgosDePrueba.evidencia(hallazgo.getId(), "evidencias/foto-1.jpg");
+        when(repositorioHallazgos.listarPorInvestigador(laura.getId())).thenReturn(List.of(hallazgo));
+        when(repositorioEvidencias.listarPorHallazgo(hallazgo.getId())).thenReturn(List.of(foto));
+        String token = iniciarSesion("investigador1@biohub.test");
+
+        mvc.perform(get("/interno/hallazgos/mios").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].expedicion").value("Expedición Atrato 2026"))
+                .andExpect(jsonPath("$[0].evidencias[0].id").value(foto.getId().toString()));
+    }
+
+    @Test
+    void unRolSinPermisoNoConsultaHallazgosYSuIntentoQuedaGuardado() throws Exception {
+        String token = iniciarSesion("admin@biohub.test");
+
+        mvc.perform(get("/interno/hallazgos/mios").header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
+
+        verify(repositorioIntentos).guardar(any(IntentoAccesoNoAutorizado.class));
+    }
+
     private Evidencia evidenciaDe(Usuario autor) {
         Hallazgo hallazgo = new Hallazgo(null, autor.getId(), OffsetDateTime.parse("2026-11-13T10:00-05:00"));
         Evidencia evidencia = HallazgosDePrueba.evidencia(hallazgo.getId(), "evidencias/foto-1.jpg");

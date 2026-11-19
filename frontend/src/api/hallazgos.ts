@@ -41,11 +41,9 @@ export interface HallazgoRegistrado {
   evidencias: EvidenciaRegistrada[];
 }
 
-/**
- * HU-01, criterio 2: consultar una evidencia después de guardarla.
- * Pasa por GET /interno/evidencias/{id}, que valida permisos (solo el autor o alto rango).
- * La pestaña se abre antes del fetch para que el navegador no la bloquee como ventana emergente.
- */
+// HU-01, criterio 2: consultar una evidencia después de guardarla.
+// Pasa por GET /interno/evidencias/{id}, que valida permisos (solo el autor o alto rango).
+// La pestaña se abre antes del fetch para que el navegador no la bloquee como ventana emergente.
 export async function abrirEvidencia(id: string) {
   const pestana = window.open('', '_blank');
   try {
@@ -75,11 +73,25 @@ export const NOMBRE_EVIDENCIA: Record<TipoEvidencia, string> = {
 };
 
 export const MAXIMO_BYTES = 10 * 1024 * 1024;
+// Entre todos los archivos de un hallazgo: el mismo límite de Nginx y Spring
+export const MAXIMO_TOTAL_BYTES = 60 * 1024 * 1024;
+export const MAXIMO_EVIDENCIAS = 5;
 
-/**
- * Arma el multipart: "datos" (JSON), "evidencias" (en el mismo orden que datos.evidencias)
- * y "atributo-{id}" para cada atributo de tipo ARCHIVO.
- */
+// Lo que devuelve GET /interno/hallazgos/mios (HU-01, criterio 2)
+export interface MiHallazgo {
+  id: string;
+  fechaRegistro: string;
+  expedicion: string | null;
+  especie: string;
+  evidencias: EvidenciaRegistrada[];
+}
+
+export function listarMisHallazgos() {
+  return pedir<MiHallazgo[]>('/interno/hallazgos/mios');
+}
+
+// Arma el multipart: "datos" (JSON), "evidencias" (en el mismo orden que datos.evidencias)
+// y "atributo-{id}" para cada atributo de tipo ARCHIVO.
 export function registrarHallazgo(datos: DatosHallazgo, archivosEvidencia: File[], archivosAtributos: Record<string, File>) {
   const formulario = new FormData();
   formulario.append('datos', new Blob([JSON.stringify(datos)], { type: 'application/json' }));

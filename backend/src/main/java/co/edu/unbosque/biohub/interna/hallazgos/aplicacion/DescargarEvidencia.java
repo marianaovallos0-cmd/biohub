@@ -15,11 +15,9 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * HU-01: "las evidencias quedan asociadas al registro y se pueden consultar después".
- * Una foto puede traer coordenadas GPS en sus metadatos, así que solo la ven el autor del hallazgo
- * y quien tiene VER_COORDENADAS (alto rango). Los demás reciben 403 y el intento queda guardado (HU-14).
- */
+// HU-01: "las evidencias quedan asociadas al registro y se pueden consultar después".
+// Una foto puede traer coordenadas GPS en sus metadatos, así que solo la ven el autor del hallazgo
+// y quien tiene VER_COORDENADAS (alto rango). Los demás reciben 403 y el intento queda guardado (HU-14).
 @Service
 public class DescargarEvidencia {
 

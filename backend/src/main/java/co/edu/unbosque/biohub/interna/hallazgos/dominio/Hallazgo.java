@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-/**
- * Un hallazgo registrado por un investigador (HU-01).
- */
+// Un hallazgo registrado por un investigador (HU-01).
 @Entity
 @Table(name = "hallazgo")
 public class Hallazgo {

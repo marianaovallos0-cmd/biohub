@@ -12,6 +12,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -65,5 +66,9 @@ public class ServicioFichas {
 
     public void guardar(FichaTaxonomica ficha) {
         fichas.guardar(ficha);
+    }
+
+    public Optional<FichaTaxonomica> vigente(UUID hallazgoId) {
+        return fichas.buscarVigente(hallazgoId);
     }
 }

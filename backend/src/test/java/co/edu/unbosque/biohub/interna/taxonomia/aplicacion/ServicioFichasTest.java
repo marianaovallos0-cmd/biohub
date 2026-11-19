@@ -63,6 +63,22 @@ class ServicioFichasTest {
     }
 
     @Test
+    void unAtributoArchivoSoloTomaLaRutaDeUnArchivoSubido() {
+        UUID temperatura = idDe(anfibio, "temperatura_agua_c");
+        UUID grabacion = idDe(anfibio, "grabacion_acustica");
+
+        FichaTaxonomica escritaAMano = servicio.armar(UUID.randomUUID(), 1,
+                rana(Map.of(temperatura, "24.5", grabacion, "evidencias/de-otro-hallazgo.mp3")));
+        FichaTaxonomica conArchivo = servicio.armar(UUID.randomUUID(), 1,
+                rana(Map.of(temperatura, "24.5")), Map.of(grabacion, "evidencias/canto.mp3"));
+
+        assertThat(escritaAMano.getValores()).extracting(v -> v.getDefinicion().getNombre())
+                .containsExactly("temperatura_agua_c");
+        assertThat(conArchivo.getValores()).extracting(v -> v.getValor())
+                .containsExactlyInAnyOrder("24.5", "evidencias/canto.mp3");
+    }
+
+    @Test
     void unTipoDeEspecieQueNoExisteSeRechaza() {
         DatosFicha datos = new DatosFicha(UUID.randomUUID(), null, null, null, null, null, "Ara", "macao", Map.of());
 

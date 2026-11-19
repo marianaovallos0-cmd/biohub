@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Una versión de la clasificación de un hallazgo (HU-02).
- */
+// Una versión de la clasificación de un hallazgo (HU-02).
 @Entity
 @Table(name = "ficha_taxonomica")
 public class FichaTaxonomica {
@@ -136,7 +134,7 @@ public class FichaTaxonomica {
 
     public List<ValorAtributo> getValores() { return Collections.unmodifiableList(valores); }
 
-    // Patrón Builder (HU-02, ASR-5). Arma la ficha por pasos y build() solo la entrega si es válida.
+    // Patrón Builder (HU-02, ASR-7). Arma la ficha por pasos y build() solo la entrega si es válida.
     public static final class Builder {
 
         private final TipoEspecie tipoEspecie;

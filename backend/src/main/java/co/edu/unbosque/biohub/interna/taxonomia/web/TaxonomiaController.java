@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * HU-02. GET /interno/tipos-especie: cada tipo con sus atributos.
- */
+// HU-02. GET /interno/tipos-especie: cada tipo con sus atributos.
 @RestController
 @RequestMapping("/interno/tipos-especie")
 public class TaxonomiaController {

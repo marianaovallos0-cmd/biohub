@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/** Los dos tipos de especie del acta (igual que los datos de prueba de la base), sin base de datos. */
+// Los dos tipos de especie del acta (igual que los datos de prueba de la base), sin base de datos.
 public final class TaxonomiaDePrueba {
 
     private TaxonomiaDePrueba() { }
 
-    /** Rana: temperatura del agua (obligatoria), grabación acústica y longitud. */
+    // Rana: temperatura del agua (obligatoria), grabación acústica y longitud.
     public static TipoEspecie anfibio() {
         TipoEspecie anfibio = conId(new TipoEspecie("Anfibio"));
         conId(anfibio.agregarAtributo("temperatura_agua_c", TipoDato.NUMERO, true));
@@ -27,7 +27,7 @@ public final class TaxonomiaDePrueba {
         return anfibio;
     }
 
-    /** Ave: ruta GPS (obligatoria), muestra de ADN y fecha de anillado. */
+    // Ave: ruta GPS (obligatoria), muestra de ADN y fecha de anillado.
     public static TipoEspecie ave() {
         TipoEspecie ave = conId(new TipoEspecie("Ave"));
         conId(ave.agregarAtributo("ruta_gps", TipoDato.TEXTO, true));
@@ -49,7 +49,7 @@ public final class TaxonomiaDePrueba {
         return entidad;
     }
 
-    /** Doble tipo fake de RepositorioTaxonomia. */
+    // Doble tipo fake de RepositorioTaxonomia.
     public static class RepositorioTaxonomiaFalso implements RepositorioTaxonomia {
 
         public final List<TipoEspecie> tipos = new ArrayList<>();
@@ -65,7 +65,7 @@ public final class TaxonomiaDePrueba {
         }
     }
 
-    /** Doble tipo fake de RepositorioFichas. */
+    // Doble tipo fake de RepositorioFichas.
     public static class RepositorioFichasFalso implements RepositorioFichas {
 
         public final List<FichaTaxonomica> guardadas = new ArrayList<>();

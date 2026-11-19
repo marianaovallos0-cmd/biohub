@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import java.time.Clock;
+import java.time.ZoneId;
 
 @Configuration
 @Profile("analitica")
@@ -21,5 +23,10 @@ public class PerfilAnaliticaConfig {
             .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
             .anyRequest().denyAll());
         return http.build();
+    }
+
+    @Bean
+    Clock reloj() {
+        return Clock.system(ZoneId.of("America/Bogota"));
     }
 }

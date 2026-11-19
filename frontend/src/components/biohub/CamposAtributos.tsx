@@ -16,10 +16,8 @@ const AYUDA: Record<TipoDato, string> = {
   ARCHIVO: 'Archivo jpg, png, pdf, mp3 o wav de máximo 10 MB.',
 };
 
-/**
- * HU-02: los campos de la ficha salen de las definiciones que manda la API.
- * Si mañana el anfibio mide algo nuevo (HU-03), aparece aquí sin tocar el frontend.
- */
+// HU-02: los campos de la ficha salen de las definiciones que manda la API.
+// Si mañana el anfibio mide algo nuevo (HU-03), aparece aquí sin tocar el frontend.
 export function CamposAtributos({ atributos, valores, onValor, onArchivo }: Props) {
   if (atributos.length === 0) {
     return <p className="text-sm text-muted-foreground">Este tipo de especie no tiene atributos propios.</p>;

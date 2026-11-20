@@ -10,6 +10,7 @@ import InicioInterno from '@/paginas/InicioInterno';
 import IntentosAcceso from '@/paginas/IntentosAcceso';
 import RegistrarHallazgo from '@/paginas/RegistrarHallazgo';
 import MisHallazgos from '@/paginas/MisHallazgos';
+import TiposEspecie from '@/paginas/TiposEspecie';
 import Reportes from '@/paginas/Reportes';
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route element={<LayoutInterno />}>
               <Route path="/interno/hallazgos/nuevo" element={<RegistrarHallazgo />} />
               <Route path="/interno/hallazgos/mios" element={<MisHallazgos />} />
+              <Route path="/interno/tipos-especie" element={<TiposEspecie />} />
               </Route>
           </Route>
           <Route element={<RutaProtegida roles={['DIRECTOR']} />}>

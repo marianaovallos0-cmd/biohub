@@ -7,6 +7,8 @@ import co.edu.unbosque.biohub.interna.seguridad.dominio.Usuario;
 import co.edu.unbosque.biohub.interna.taxonomia.TaxonomiaDePrueba;
 import co.edu.unbosque.biohub.interna.taxonomia.dominio.RepositorioFichas;
 import co.edu.unbosque.biohub.interna.taxonomia.dominio.RepositorioTaxonomia;
+import co.edu.unbosque.biohub.interna.taxonomia.dominio.TipoEspecie;
+import org.springframework.test.util.ReflectionTestUtils;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static co.edu.unbosque.biohub.interna.seguridad.DatosDePrueba.CLAVE;
@@ -31,6 +34,8 @@ import static co.edu.unbosque.biohub.interna.seguridad.dominio.NivelAutorizacion
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -118,6 +123,62 @@ class TaxonomiaControllerTest {
         verify(repositorioIntentos).guardar(guardado.capture());
         assertThat(guardado.getValue().getUsuario()).isSameAs(admin);
         assertThat(guardado.getValue().getRecursoSolicitado()).isEqualTo("GET /interno/tipos-especie");
+    }
+
+    // HU-03 de punta a punta: el investigador agrega un atributo y el siguiente GET ya lo trae
+    @Test
+    void elInvestigadorAgregaUnAtributoYApareceEnElFormulario() throws Exception {
+        TipoEspecie anfibio = TaxonomiaDePrueba.anfibio();
+        when(repositorioTaxonomia.buscarTipo(anfibio.getId())).thenReturn(Optional.of(anfibio));
+        when(repositorioTaxonomia.listarTipos()).thenReturn(List.of(anfibio));
+        doAnswer(i -> {
+            // Se guarda en una variable Object: si no, Java escoge la versión de setField que recibe una Class
+            Object definicion = i.getArgument(0);
+            ReflectionTestUtils.setField(definicion, "id", UUID.randomUUID());
+            return null;
+        }).when(repositorioTaxonomia).guardarDefinicion(any());
+        String token = iniciarSesion("investigador1@biohub.test");
+
+        mvc.perform(post("/interno/tipos-especie/" + anfibio.getId() + "/atributos")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nombre\":\"Color de piel\",\"tipoDato\":\"TEXTO\",\"obligatorio\":false}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nombre").value("color_de_piel"))
+                .andExpect(jsonPath("$.tipoDato").value("TEXTO"));
+
+        mvc.perform(get("/interno/tipos-especie").header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].atributos[?(@.nombre == 'color_de_piel')]").exists());
+    }
+
+    @Test
+    void unAtributoRepetidoResponde400() throws Exception {
+        TipoEspecie anfibio = TaxonomiaDePrueba.anfibio();
+        when(repositorioTaxonomia.buscarTipo(anfibio.getId())).thenReturn(Optional.of(anfibio));
+        String token = iniciarSesion("investigador1@biohub.test");
+
+        mvc.perform(post("/interno/tipos-especie/" + anfibio.getId() + "/atributos")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nombre\":\"temperatura_agua_c\",\"tipoDato\":\"NUMERO\",\"obligatorio\":true}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("El tipo «Anfibio» ya tiene el atributo «temperatura_agua_c»."));
+        verify(repositorioTaxonomia, never()).guardarDefinicion(any());
+    }
+
+    @Test
+    void unRolSinGestionarTaxonomiaNoAgregaAtributosYSuIntentoQuedaGuardado() throws Exception {
+        String token = iniciarSesion("admin@biohub.test");
+
+        mvc.perform(post("/interno/tipos-especie/" + UUID.randomUUID() + "/atributos")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nombre\":\"ph\",\"tipoDato\":\"NUMERO\",\"obligatorio\":false}"))
+                .andExpect(status().isForbidden());
+
+        verify(repositorioIntentos).guardar(any(IntentoAccesoNoAutorizado.class));
+        verify(repositorioTaxonomia, never()).guardarDefinicion(any());
     }
 
     @Test

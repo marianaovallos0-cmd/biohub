@@ -9,8 +9,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  # HU-01: cada evidencia hasta 10 MB y la petición completa hasta 60 MB (Nginx tiene el mismo límite)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 60MB
 
 biohub:
   jwt:
     secreto: ${JWT_SECRETO}
     duracion: 1h
+  # HU-01: los archivos de las evidencias quedan en /data/evidencias (volumen de Docker)
+  archivos:
+    raiz: ${ARCHIVOS_RAIZ:/data}

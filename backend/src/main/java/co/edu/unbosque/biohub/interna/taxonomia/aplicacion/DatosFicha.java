@@ -19,10 +19,4 @@ public record DatosFicha(UUID tipoEspecieId, String reino, String filo, String c
         }
         valores = Map.copyOf(limpios);
     }
-
-    public DatosFicha conValor(UUID definicionId, String valor) {
-        Map<UUID, String> nuevos = new HashMap<>(valores);
-        nuevos.put(definicionId, valor);
-        return new DatosFicha(tipoEspecieId, reino, filo, clase, orden, familia, genero, especie, nuevos);
-    }
 }

@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Camera, ChartColumn, LayoutGrid, Leaf, LogOut, Search, ShieldAlert, Users, type LucideIcon } from 'lucide-react';
+import { Camera, ChartColumn, FolderOpen, LayoutGrid, Leaf, LogOut, Search, ShieldAlert, Users, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSesion, type Rol } from '@/auth/SesionContext';
 import { Logo } from './Logo';
@@ -14,6 +14,7 @@ interface ItemMenu {
 const MENU: Record<Rol, ItemMenu[]> = {
   INVESTIGADOR: [
     { ruta: '/interno/hallazgos/nuevo', texto: 'Registrar hallazgo', icono: Leaf },
+    { ruta: '/interno/hallazgos/mios', texto: 'Mis hallazgos', icono: FolderOpen },
     { ruta: '/interno/tipos-especie', texto: 'Tipos de especie', icono: LayoutGrid },
   ],
   AUDITOR: [

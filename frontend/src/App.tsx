@@ -8,6 +8,8 @@ import FichaPublica from '@/paginas/FichaPublica';
 import Login from '@/paginas/Login';
 import InicioInterno from '@/paginas/InicioInterno';
 import IntentosAcceso from '@/paginas/IntentosAcceso';
+import RegistrarHallazgo from '@/paginas/RegistrarHallazgo';
+import MisHallazgos from '@/paginas/MisHallazgos';
 import Reportes from '@/paginas/Reportes';
 
 export default function App() {
@@ -29,6 +31,12 @@ export default function App() {
             </Route>
           </Route>
 
+          <Route element={<RutaProtegida roles={['INVESTIGADOR']} />}>
+            <Route element={<LayoutInterno />}>
+              <Route path="/interno/hallazgos/nuevo" element={<RegistrarHallazgo />} />
+              <Route path="/interno/hallazgos/mios" element={<MisHallazgos />} />
+              </Route>
+          </Route>
           <Route element={<RutaProtegida roles={['DIRECTOR']} />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno/reportes" element={<Reportes />} />

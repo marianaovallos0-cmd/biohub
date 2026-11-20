@@ -33,11 +33,22 @@ public class Rol {
     public Rol(String nombre, NivelAutorizacion nivelAutorizacion, Set<Permiso> permisos) {
         this.nombre = nombre;
         this.nivelAutorizacion = nivelAutorizacion;
-        this.permisos = permisos;
+        this.permisos = new HashSet<>(permisos);
     }
 
     public boolean tienePermiso(String codigo) {
        return permisos.stream().anyMatch(p -> p.getCodigo().equals(codigo));
+    }
+
+    // HU-15: los permisos viven en el rol, así que el cambio aplica a todos los usuarios que lo tienen
+    public void agregarPermiso(Permiso permiso) {
+        if (!tienePermiso(permiso.getCodigo())) {
+            permisos.add(permiso);
+        }
+    }
+
+    public void quitarPermiso(String codigo) {
+        permisos.removeIf(p -> p.getCodigo().equals(codigo));
     }
 
     public UUID getId() {

@@ -28,3 +28,18 @@ export function nombreLegible(nombre: string) {
 
 // Los mismos formatos que acepta el backend (ValidadorArchivo)
 export const ARCHIVOS_PERMITIDOS = '.jpg,.jpeg,.png,.pdf,.mp3,.wav';
+
+// HU-03: POST /interno/tipos-especie/{id}/atributos. No se reinicia nada: el formulario lo trae en la siguiente carga
+export function agregarAtributo(tipoId: string, atributo: { nombre: string; tipoDato: TipoDato; obligatorio: boolean }) {
+  return pedir<AtributoDefinido>(`/interno/tipos-especie/${tipoId}/atributos`, {
+    method: 'POST',
+    body: JSON.stringify(atributo),
+  });
+}
+
+export const NOMBRE_TIPO_DATO: Record<TipoDato, string> = {
+  NUMERO: 'Número',
+  TEXTO: 'Texto',
+  FECHA: 'Fecha',
+  ARCHIVO: 'Archivo',
+};

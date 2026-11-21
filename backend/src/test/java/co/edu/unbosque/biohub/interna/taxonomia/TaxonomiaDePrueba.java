@@ -53,6 +53,7 @@ public final class TaxonomiaDePrueba {
     public static class RepositorioTaxonomiaFalso implements RepositorioTaxonomia {
 
         public final List<TipoEspecie> tipos = new ArrayList<>();
+        public final List<DefinicionAtributo> definicionesGuardadas = new ArrayList<>();
 
         @Override
         public List<TipoEspecie> listarTipos() {
@@ -62,6 +63,13 @@ public final class TaxonomiaDePrueba {
         @Override
         public Optional<TipoEspecie> buscarTipo(UUID id) {
             return tipos.stream().filter(t -> t.getId().equals(id)).findFirst();
+        }
+
+        // En la base el id lo pone PostgreSQL al insertar; aquí lo ponemos a mano
+        @Override
+        public void guardarDefinicion(DefinicionAtributo definicion) {
+            conId(definicion);
+            definicionesGuardadas.add(definicion);
         }
     }
 

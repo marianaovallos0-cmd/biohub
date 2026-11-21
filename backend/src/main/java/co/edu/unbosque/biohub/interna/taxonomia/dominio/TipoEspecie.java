@@ -29,15 +29,36 @@ public class TipoEspecie {
         this.nombre = nombre;
     }
 
-    // Lo usa HU-03. Dos atributos del mismo tipo no pueden llamarse igual (UNIQUE en la base).
+    static final int LARGO_MAXIMO_NOMBRE = 100;
+
+    // HU-03. Agregar un atributo es crear una definición nueva: no cambia el código ni las tablas (ASR-7).
+    // Las fichas anteriores no se tocan; si el atributo es obligatorio, solo se exige en las fichas nuevas.
+    // El nombre se guarda en minúsculas y con guiones bajos ("Color de piel" -> "color_de_piel").
     public DefinicionAtributo agregarAtributo(String nombre, TipoDato tipoDato, boolean obligatorio) {
-        boolean repetido = definiciones.stream().anyMatch(d -> d.getNombre().equalsIgnoreCase(nombre));
-        if (repetido) {
-            throw new IllegalArgumentException("El tipo «" + this.nombre + "» ya tiene el atributo «" + nombre + "».");
+        String limpio = normalizar(nombre);
+        if (limpio.isEmpty()) {
+            throw new AtributoInvalidoException("El nombre del atributo es obligatorio.");
         }
-        DefinicionAtributo definicion = new DefinicionAtributo(this, nombre, tipoDato, obligatorio);
+        if (limpio.length() > LARGO_MAXIMO_NOMBRE) {
+            throw new AtributoInvalidoException("El nombre del atributo tiene más de " + LARGO_MAXIMO_NOMBRE + " caracteres.");
+        }
+        if (tipoDato == null) {
+            throw new AtributoInvalidoException("Falta el tipo de dato del atributo.");
+        }
+        boolean repetido = definiciones.stream().anyMatch(d -> d.getNombre().equalsIgnoreCase(limpio));
+        if (repetido) {
+            throw new AtributoInvalidoException("El tipo «" + this.nombre + "» ya tiene el atributo «" + limpio + "».");
+        }
+        DefinicionAtributo definicion = new DefinicionAtributo(this, limpio, tipoDato, obligatorio);
         definiciones.add(definicion);
         return definicion;
+    }
+
+    static String normalizar(String nombre) {
+        if (nombre == null) {
+            return "";
+        }
+        return nombre.trim().toLowerCase(java.util.Locale.ROOT).replaceAll("\\s+", "_");
     }
 
     public Optional<DefinicionAtributo> definicion(UUID definicionId) {

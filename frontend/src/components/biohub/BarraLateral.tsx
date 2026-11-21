@@ -18,7 +18,7 @@ const MENU: Record<Rol, ItemMenu[]> = {
     { ruta: '/interno/tipos-especie', texto: 'Tipos de especie', icono: LayoutGrid },
   ],
   AUDITOR: [
-    { ruta: '/interno/hallazgos', texto: 'Hallazgos', icono: Leaf },
+    { ruta: '/interno/trazabilidad', texto: 'Hallazgos', icono: Leaf },
     { ruta: '/interno/intentos', texto: 'Intentos de acceso', icono: ShieldAlert },
   ],
   DIRECTOR: [{ ruta: '/interno/reportes', texto: 'Reportes', icono: ChartColumn }],

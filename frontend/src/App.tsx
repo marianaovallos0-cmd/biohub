@@ -12,6 +12,8 @@ import RegistrarHallazgo from '@/paginas/RegistrarHallazgo';
 import MisHallazgos from '@/paginas/MisHallazgos';
 import Reportes from '@/paginas/Reportes';
 import UsuariosRoles from '@/paginas/UsuariosRoles';
+import HallazgosAuditoria from '@/paginas/HallazgosAuditoria';
+import HistorialHallazgo from '@/paginas/HistorialHallazgo';
 
 export default function App() {
   return (
@@ -47,6 +49,9 @@ export default function App() {
           <Route element={<RutaProtegida roles={['AUDITOR']} />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno/intentos" element={<IntentosAcceso />} />
+              {/* HU-06, HU-07 y HU-08 */}
+              <Route path="/interno/trazabilidad" element={<HallazgosAuditoria />} />
+              <Route path="/interno/trazabilidad/:hallazgoId" element={<HistorialHallazgo />} />
             </Route>
           </Route>
 

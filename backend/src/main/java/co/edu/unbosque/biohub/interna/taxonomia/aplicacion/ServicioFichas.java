@@ -71,4 +71,9 @@ public class ServicioFichas {
     public Optional<FichaTaxonomica> vigente(UUID hallazgoId) {
         return fichas.buscarVigente(hallazgoId);
     }
+
+    // De la versión 1 a la vigente (HU-08)
+    public List<FichaTaxonomica> versiones(UUID hallazgoId) {
+        return fichas.listarVersiones(hallazgoId);
+    }
 }

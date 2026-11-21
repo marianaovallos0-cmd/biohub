@@ -4,6 +4,7 @@ import co.edu.unbosque.biohub.interna.taxonomia.dominio.FichaTaxonomica;
 import co.edu.unbosque.biohub.interna.taxonomia.dominio.RepositorioFichas;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,5 +25,10 @@ public class RepositorioFichasJpa implements RepositorioFichas {
     @Override
     public Optional<FichaTaxonomica> buscarVigente(UUID hallazgoId) {
         return jpa.findFirstByHallazgoIdOrderByNumeroVersionDesc(hallazgoId);
+    }
+
+    @Override
+    public List<FichaTaxonomica> listarVersiones(UUID hallazgoId) {
+        return jpa.findByHallazgoIdOrderByNumeroVersionAsc(hallazgoId);
     }
 }

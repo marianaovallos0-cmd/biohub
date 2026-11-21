@@ -80,5 +80,12 @@ public final class TaxonomiaDePrueba {
             return guardadas.stream().filter(f -> f.getHallazgoId().equals(hallazgoId))
                     .max(java.util.Comparator.comparingInt(FichaTaxonomica::getNumeroVersion));
         }
+
+        @Override
+        public List<FichaTaxonomica> listarVersiones(UUID hallazgoId) {
+            return guardadas.stream().filter(f -> f.getHallazgoId().equals(hallazgoId))
+                    .sorted(java.util.Comparator.comparingInt(FichaTaxonomica::getNumeroVersion))
+                    .toList();
+        }
     }
 }

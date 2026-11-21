@@ -20,8 +20,10 @@ public class TaxonomiaController {
         this.consultarTipos = consultarTipos;
     }
 
+    // El auditor también los lee para reclasificar (HU-06)
     @GetMapping
-    @PreAuthorize("@autorizacion.validarAcceso(principal, 'REGISTRAR_HALLAZGO')")
+    @PreAuthorize("@autorizacion.validarAcceso(principal, 'REGISTRAR_HALLAZGO')"
+            + " or @autorizacion.validarAcceso(principal, 'RECLASIFICAR_HALLAZGO')")
     public List<TipoEspecieConAtributos> listar() {
         return consultarTipos.ejecutar();
     }

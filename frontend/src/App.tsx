@@ -11,6 +11,7 @@ import IntentosAcceso from '@/paginas/IntentosAcceso';
 import RegistrarHallazgo from '@/paginas/RegistrarHallazgo';
 import MisHallazgos from '@/paginas/MisHallazgos';
 import Reportes from '@/paginas/Reportes';
+import UsuariosRoles from '@/paginas/UsuariosRoles';
 
 export default function App() {
   return (
@@ -46,6 +47,13 @@ export default function App() {
           <Route element={<RutaProtegida roles={['AUDITOR']} />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno/intentos" element={<IntentosAcceso />} />
+            </Route>
+          </Route>
+
+          {/* HU-15: solo el administrador */}
+          <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
+            <Route element={<LayoutInterno />}>
+              <Route path="/interno/usuarios" element={<UsuariosRoles />} />
             </Route>
           </Route>
         </Routes>

@@ -77,6 +77,12 @@ services:
       SPRING_PROFILES_ACTIVE: analitica
       DB_URL: jdbc:postgresql://db:5432/biohub
       DB_PASSWORD_ANALITICA: ${DB_PASSWORD_ANALITICA}
+      # HU-19: por defecto el día 1 a las 2:00 a. m. Para la demostración: "0 * * * * *" (cada minuto)
+      BIOHUB_ANALITICA_CRON_MENSUAL: ${BIOHUB_ANALITICA_CRON_MENSUAL:-0 0 2 1 * *}
+    # HU-19 (ASR-6): contenedor aparte con su propio límite de CPU y memoria,
+    # así el cálculo no le quita recursos a la api-interna ni a la api-pública
+    cpus: "1.0"
+    mem_limit: 768m
     depends_on:
       migraciones:
         condition: service_completed_successfully

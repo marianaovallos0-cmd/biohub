@@ -2,6 +2,7 @@ package co.edu.unbosque.biohub.analitica.generador.infraestructura;
 
 import co.edu.unbosque.biohub.analitica.generador.dominio.ConteoDepartamento;
 import co.edu.unbosque.biohub.analitica.generador.dominio.IndicadorDepartamento;
+import co.edu.unbosque.biohub.analitica.generador.dominio.ProgramadorReportes;
 import co.edu.unbosque.biohub.analitica.generador.dominio.ReportePendiente;
 import co.edu.unbosque.biohub.analitica.generador.dominio.RepositorioAnalitico;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 // SQL directo y no JPA: la analítica no tiene permiso de leer latitud ni longitud (V3__permisos, ASR-1)
 @Repository
-public class RepositorioAnaliticoJdbc implements RepositorioAnalitico {
+public class RepositorioAnaliticoJdbc implements RepositorioAnalitico, ProgramadorReportes {
 
     public static final String TIPO = "PRESION_ECOLOGICA";
     private static final ZoneId BOGOTA = ZoneId.of("America/Bogota");
@@ -73,6 +74,19 @@ public class RepositorioAnaliticoJdbc implements RepositorioAnalitico {
                 .param("fecha", generadoEn)
                 .param("id", reporteId)
                 .update();
+    }
+
+    // HU-19: el reporte automático no lo pide nadie, por eso solicitado_por queda vacío
+    @Override
+    public boolean programar(YearMonth mes) {
+        return jdbc.sql("""
+                        INSERT INTO reporte (tipo, parametros)
+                        VALUES (:tipo, :mes)
+                        ON CONFLICT (tipo, parametros) DO NOTHING
+                        """)
+                .param("tipo", TIPO)
+                .param("mes", mes.toString())
+                .update() == 1;
     }
 
     // El mes empieza a las 00:00 en Colombia, no en UTC

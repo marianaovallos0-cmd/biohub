@@ -3,6 +3,9 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
+const soloDatos = (req: { headers: Record<string, string | string[] | undefined> }) =>
+  String(req.headers.accept ?? '').includes('text/html') ? '/index.html' : undefined
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -14,8 +17,8 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
     proxy: {
-      '/interno': 'http://localhost:8080',
-      '/publico': 'http://localhost:8080',
+      '/interno': { target: 'http://localhost:8080', bypass: soloDatos },
+      '/publico': { target: 'http://localhost:8080', bypass: soloDatos },
     },
   },
 })

@@ -13,6 +13,7 @@ import MisHallazgos from '@/paginas/MisHallazgos';
 import TiposEspecie from '@/paginas/TiposEspecie';
 import Reportes from '@/paginas/Reportes';
 import UsuariosRoles from '@/paginas/UsuariosRoles';
+import EquiposCampo from '@/paginas/EquiposCampo';
 import HallazgosAuditoria from '@/paginas/HallazgosAuditoria';
 import HistorialHallazgo from '@/paginas/HistorialHallazgo';
 
@@ -61,6 +62,7 @@ export default function App() {
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno/usuarios" element={<UsuariosRoles />} />
+              <Route path="/interno/equipos" element={<EquiposCampo />} />
             </Route>
           </Route>
         </Routes>

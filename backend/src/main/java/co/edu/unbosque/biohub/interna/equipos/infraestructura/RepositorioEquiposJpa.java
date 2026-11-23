@@ -5,6 +5,7 @@ import co.edu.unbosque.biohub.interna.equipos.dominio.RepositorioEquipos;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class RepositorioEquiposJpa implements RepositorioEquipos {
@@ -29,5 +30,10 @@ public class RepositorioEquiposJpa implements RepositorioEquipos {
     @Override
     public List<EquipoCampo> listar() {
         return jpa.findAllByOrderByCodigoIdentificacionAsc();
+    }
+
+    @Override
+    public List<EquipoCampo> listarPorInvestigador(UUID investigadorId) {
+        return jpa.findByInvestigadorIdOrderByCodigoIdentificacionAsc(investigadorId);
     }
 }

@@ -10,6 +10,7 @@ import {
   type Responsable,
   type TipoEquipo,
 } from '@/api/equipos';
+import { EquiposPorInvestigador } from '@/components/biohub/EquiposPorInvestigador';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,7 @@ export default function EquiposCampo() {
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState<string[]>([]);
   const [registrado, setRegistrado] = useState<Equipo | null>(null);
+  const [version, setVersion] = useState(0);
 
   function cargarEquipos() {
     return listarEquipos()
@@ -56,6 +58,7 @@ export default function EquiposCampo() {
     try {
       const equipo = await registrarEquipo({ codigoIdentificacion: codigo, tipo, investigadorId: investigadorId || null });
       setRegistrado(equipo);
+      setVersion((v) => v + 1);
       setCodigo('');
       setInvestigadorId('');
       await cargarEquipos();
@@ -141,6 +144,8 @@ export default function EquiposCampo() {
           </div>
         </CardContent>
       </Card>
+
+      <EquiposPorInvestigador responsables={responsables} version={version} />
 
       {equipos && (
         equipos.length === 0 ? (

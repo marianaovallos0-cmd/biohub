@@ -1,0 +1,198 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /scripts/hu11-pico-consulta.js
+        output: -
+
+     scenarios: (100.00%) 3 scenarios, 1302 max VUs, 2m30s max duration (incl. graceful stop):
+              * busqueda: Up to 1000 looping VUs for 1m45s over 3 stages (gracefulRampDown: 30s, exec: buscar, gracefulStop: 30s)
+              * ficha_noticia: Up to 70.00 iterations/s for 1m45s over 4 stages (maxVUs: 100-300, exec: verFicha, gracefulStop: 30s)
+              * registro: 0.20 iterations/s for 2m0s (maxVUs: 2, exec: registrar, gracefulStop: 30s)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  █ THRESHOLDS 
+
+    checks{scenario:busqueda}
+    ✓ 'rate>0.99' rate=100.00%
+
+    checks{scenario:ficha_noticia}
+    ✓ 'rate>0.99' rate=100.00%
+
+    checks{scenario:registro}
+    ✓ 'rate==1' rate=100.00%
+
+    http_req_duration{scenario:busqueda}
+    ✓ 'p(95)<2000' p(95)=2.09ms
+    ✓ 'p(99)<3000' p(99)=4.12ms
+
+    http_req_duration{scenario:ficha_noticia}
+    ✓ 'p(95)<2000' p(95)=1.78ms
+    ✓ 'p(99)<3000' p(99)=3.35ms
+
+    http_req_duration{scenario:registro}
+    ✓ 'max<5000' max=31.8ms
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 87662   729.760814/s
+    checks_succeeded...: 100.00% 87662 out of 87662
+    checks_failed......: 0.00%   0 out of 87662
+
+    ✓ el hallazgo se registra (201)
+    ✓ la búsqueda responde 200
+    ✓ la ficha responde 200
+
+    HTTP
+    http_req_duration..............: avg=1.09ms   min=312.83µs med=900.7µs  max=68.43ms p(90)=1.64ms  p(95)=2.08ms 
+      { expected_response:true }...: avg=1.09ms   min=312.83µs med=900.7µs  max=68.43ms p(90)=1.64ms  p(95)=2.08ms 
+      { scenario:busqueda }........: avg=1.1ms    min=312.83µs med=917.58µs max=53.75ms p(90)=1.65ms  p(95)=2.09ms 
+      { scenario:ficha_noticia }...: avg=806.25µs min=313.83µs med=641.25µs max=14.35ms p(90)=1.21ms  p(95)=1.78ms 
+      { scenario:registro }........: avg=18.84ms  min=11.29ms  med=18.66ms  max=31.8ms  p(90)=27.21ms p(95)=29.27ms
+    http_req_failed................: 0.00%  0 out of 87664
+    http_reqs......................: 87664  729.777463/s
+
+    EXECUTION
+    iteration_duration.............: avg=947.02ms min=338.12µs med=1s       max=1.05s   p(90)=1s      p(95)=1s     
+    iterations.....................: 87662  729.760814/s
+    vus............................: 0      min=0          max=1001
+    vus_max........................: 1102   min=1102       max=1102
+
+    NETWORK
+    data_received..................: 1.1 GB 9.5 MB/s
+    data_sent......................: 7.9 MB 65 kB/s
+
+
+
+
+running (2m00.1s), 0000/1102 VUs, 87662 complete and 0 interrupted iterations
+busqueda      ✓ [ 100% ] 0000/1000 VUs  1m45s 
+ficha_noticia ✓ [ 100% ] 000/100 VUs    1m45s  02.65 iters/s
+registro      ✓ [ 100% ] 0/2 VUs        2m0s   0.20 iters/s

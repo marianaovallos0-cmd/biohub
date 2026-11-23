@@ -54,6 +54,20 @@ Se cargan solos al levantar el proyecto. La contraseña de todos es `biohub123`.
 
 Consumidores externos: `dev-key-universidad` (120 por minuto) y `dev-key-ong` (60 por minuto).
 
+## Prueba de carga (HU-11)
+
+Demuestra que la consulta pública aguanta 1000 usuarios simultáneos y un pico de 70 veces el tráfico en una ficha, mientras se siguen registrando hallazgos. Los resultados están en [`pruebas/k6/HU-11-resultados.md`](pruebas/k6/HU-11-resultados.md).
+
+1. Con el proyecto levantado, carga los 10.000 registros (si lo corres otra vez, primero borra la carga anterior):
+   ```
+   docker compose exec -T db psql -U postgres -d biohub < pruebas/k6/datos-10000.sql
+   ```
+2. Corre la prueba (tarda 2 minutos). En Windows cambia `"$PWD/pruebas/k6"` por `"%cd%/pruebas/k6"`:
+   ```
+   docker run --rm --network biohub_default -v "$PWD/pruebas/k6:/scripts" -e BASE=http://nginx grafana/k6:2.3.0 run --summary-export=/scripts/resultados/hu11-resumen.json /scripts/hu11-pico-consulta.js
+   ```
+3. Si se cumplen todos los límites de la sección `THRESHOLDS`, se cumplen los criterios.
+
 ## Cómo trabajamos
 
 1. Mueve tu HU a **En curso** en Jira.

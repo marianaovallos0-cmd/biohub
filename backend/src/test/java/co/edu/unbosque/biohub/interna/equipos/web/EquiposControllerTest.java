@@ -4,6 +4,7 @@ import co.edu.unbosque.biohub.interna.equipos.EquiposDePrueba;
 import co.edu.unbosque.biohub.interna.equipos.dominio.DirectorioInvestigadores;
 import co.edu.unbosque.biohub.interna.equipos.dominio.EquipoCampo;
 import co.edu.unbosque.biohub.interna.equipos.dominio.RepositorioEquipos;
+import co.edu.unbosque.biohub.interna.equipos.dominio.TipoEquipo;
 import co.edu.unbosque.biohub.interna.seguridad.dominio.IntentoAccesoNoAutorizado;
 import co.edu.unbosque.biohub.interna.seguridad.dominio.RepositorioIntentos;
 import co.edu.unbosque.biohub.interna.seguridad.dominio.RepositorioUsuarios;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static co.edu.unbosque.biohub.interna.equipos.EquiposDePrueba.ANDRES;
 import static co.edu.unbosque.biohub.interna.equipos.EquiposDePrueba.LAURA;
 import static co.edu.unbosque.biohub.interna.seguridad.DatosDePrueba.CLAVE;
 import static co.edu.unbosque.biohub.interna.seguridad.DatosDePrueba.rol;
@@ -160,6 +162,52 @@ class EquiposControllerTest {
         assertThat(intento.getValue().getUsuario()).isSameAs(laura);
         assertThat(intento.getValue().getRecursoSolicitado()).isEqualTo("POST /interno/equipos");
         verify(repositorioEquipos, never()).guardar(any());
+    }
+
+    // HU-05, criterio 1: los equipos del investigador con su identificación
+    @Test
+    void elAdministradorVeLosEquiposDeUnInvestigador() throws Exception {
+        when(repositorioEquipos.listarPorInvestigador(LAURA.id())).thenReturn(List.of(
+                new EquipoCampo("CAM-014", TipoEquipo.CAMARA_TRAMPA, LAURA.id()),
+                new EquipoCampo("DRN-001", TipoEquipo.DRON, LAURA.id())));
+        String token = iniciarSesion("admin@biohub.test");
+
+        mvc.perform(get("/interno/equipos/responsables/" + LAURA.id()).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.investigador.nombre").value("Laura Gómez"))
+                .andExpect(jsonPath("$.equipos.length()").value(2))
+                .andExpect(jsonPath("$.equipos[0].codigoIdentificacion").value("CAM-014"))
+                .andExpect(jsonPath("$.equipos[1].codigoIdentificacion").value("DRN-001"));
+    }
+
+    // HU-05, criterio 2: sin equipos la lista viene vacía (no es un error) y el frontend lo explica
+    @Test
+    void unInvestigadorSinEquiposDevuelveLaListaVacia() throws Exception {
+        when(directorio.buscarActivo(ANDRES.id())).thenReturn(Optional.of(ANDRES));
+        String token = iniciarSesion("admin@biohub.test");
+
+        mvc.perform(get("/interno/equipos/responsables/" + ANDRES.id()).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.investigador.nombre").value("Andrés Rojas"))
+                .andExpect(jsonPath("$.equipos.length()").value(0));
+    }
+
+    @Test
+    void unInvestigadorQueNoExisteDa404() throws Exception {
+        String token = iniciarSesion("admin@biohub.test");
+
+        mvc.perform(get("/interno/equipos/responsables/" + UUID.randomUUID()).header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.detail").value("El investigador no existe o está inactivo."));
+    }
+
+    @Test
+    void unInvestigadorNoConsultaLosEquiposDeOtros() throws Exception {
+        String token = iniciarSesion("investigador1@biohub.test");
+
+        mvc.perform(get("/interno/equipos/responsables/" + LAURA.id()).header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
+        verify(repositorioIntentos).guardar(any(IntentoAccesoNoAutorizado.class));
     }
 
     @Test

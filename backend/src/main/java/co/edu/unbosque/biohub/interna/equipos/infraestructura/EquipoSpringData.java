@@ -11,4 +11,6 @@ interface EquipoSpringData extends JpaRepository<EquipoCampo, UUID> {
     boolean existsByCodigoIdentificacion(String codigoIdentificacion);
 
     List<EquipoCampo> findAllByOrderByCodigoIdentificacionAsc();
+
+    List<EquipoCampo> findByInvestigadorIdOrderByCodigoIdentificacionAsc(UUID investigadorId);
 }

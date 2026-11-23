@@ -36,3 +36,13 @@ export function listarResponsables() {
 export function registrarEquipo(equipo: { codigoIdentificacion: string; tipo: TipoEquipo; investigadorId: string | null }) {
   return pedir<Equipo>('/interno/equipos', { method: 'POST', body: JSON.stringify(equipo) });
 }
+
+// HU-05: los equipos de un investigador. Si la lista viene vacía, la pantalla dice que no tiene equipos
+export interface EquiposDeInvestigador {
+  investigador: Responsable;
+  equipos: Equipo[];
+}
+
+export function consultarEquiposDe(investigadorId: string) {
+  return pedir<EquiposDeInvestigador>(`/interno/equipos/responsables/${investigadorId}`);
+}

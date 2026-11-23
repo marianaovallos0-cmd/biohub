@@ -41,6 +41,11 @@ public final class EquiposDePrueba {
         public List<EquipoCampo> listar() {
             return guardados.stream().sorted(Comparator.comparing(EquipoCampo::getCodigoIdentificacion)).toList();
         }
+
+        @Override
+        public List<EquipoCampo> listarPorInvestigador(UUID investigadorId) {
+            return listar().stream().filter(e -> e.getInvestigadorId().equals(investigadorId)).toList();
+        }
     }
 
     public static class DirectorioFalso implements DirectorioInvestigadores {

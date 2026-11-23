@@ -66,7 +66,7 @@ Demuestra que la consulta pública aguanta 1000 usuarios simultáneos y un pico 
    ```
    docker run --rm --network biohub_default -v "$PWD/pruebas/k6:/scripts" -e BASE=http://nginx grafana/k6:2.3.0 run --summary-export=/scripts/resultados/hu11-resumen.json /scripts/hu11-pico-consulta.js
    ```
-3. Si todas las líneas de `THRESHOLDS` tienen ✓, se cumplen los criterios.
+3. Si se cumplen todos los límites de la sección `THRESHOLDS`, se cumplen los criterios.
 
 ## Cómo trabajamos
 

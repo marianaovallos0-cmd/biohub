@@ -2,7 +2,7 @@
 
 **Historia:** sostener un pico de consulta sin afectar el registro (ISW-45).
 **Fecha de la prueba:** 23 de noviembre de 2026.
-**Resultado:** ✅ se cumplen los 4 criterios de aceptación.
+**Resultado:** se cumplen los 4 criterios de aceptación.
 
 ## Cómo se hizo
 
@@ -19,12 +19,10 @@
 
 ## Resultados por criterio
 
-| # | Criterio | Meta | Medido | ¿Cumple? |
-|---|---|---|---|---|
-| 1 | El tráfico a una ficha se multiplica por más de 60 y la consulta responde dentro de los 2 s | p95 < 2 s con más de 60 veces el tráfico | ×70 el tráfico, **p95 = 1,8 ms**, máximo 14 ms | ✅ |
-| 2 | Durante el pico, el registro de hallazgos mantiene sus 5 s | Ningún registro tarda más de 5 s | **máximo = 32 ms**, promedio 19 ms, todos respondieron 201 | ✅ |
-| 3 | Con 1000 consultas simultáneas no se alteran los tiempos | p95 < 2 s con 1000 usuarios | 1000 usuarios, **p95 = 2,1 ms**, máximo 54 ms | ✅ |
-| 4 | Con 10.000 registros las consultas responden en menos de 3 s | p99 < 3 s | 10.011 registros, **p99 = 4,1 ms** (búsqueda) y 3,4 ms (ficha) | ✅ |
+1. **El tráfico a una ficha se multiplica por más de 60 y la consulta responde dentro de los 2 s.** Con 70 veces el tráfico normal, el 95 % de las respuestas tardó menos de 1,8 ms y la más lenta, 14 ms. Se cumple.
+2. **Durante el pico, el registro de hallazgos mantiene sus 5 s.** El registro más lento tardó 32 ms y el promedio fue 19 ms. Todos quedaron guardados. Se cumple.
+3. **Con 1000 consultas simultáneas no se alteran los tiempos.** Con 1000 usuarios buscando, el 95 % de las búsquedas tardó menos de 2,1 ms y la más lenta, 54 ms. Se cumple.
+4. **Con 10.000 registros las consultas responden en menos de 3 s.** Con 10.011 registros, el 99 % tardó menos de 4,1 ms en la búsqueda y 3,4 ms en la ficha. Se cumple.
 
 **Respuestas correctas:** 100 % (87.662 de 87.662 comprobaciones). **Peticiones fallidas:** 0 de 87.664.
 **Ritmo:** unas 730 peticiones por segundo en promedio.

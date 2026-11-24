@@ -1,0 +1,105 @@
+name: biohub
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: biohub
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD}
+      DB_PASSWORD_INTERNA: ${DB_PASSWORD_INTERNA}
+      DB_PASSWORD_PUBLICA: ${DB_PASSWORD_PUBLICA}
+      DB_PASSWORD_ANALITICA: ${DB_PASSWORD_ANALITICA}
+    ports:
+      - "5433:5432"
+    volumes:
+      - datos-db:/var/lib/postgresql/data
+      - ./infra/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d biohub"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  migraciones:
+    image: flyway/flyway:11
+    command: >
+      -url=jdbc:postgresql://db:5432/biohub
+      -user=postgres -password=${DB_ADMIN_PASSWORD}
+      -locations=filesystem:/flyway/sql,filesystem:/flyway/dev
+      migrate
+    volumes:
+      - ./backend/src/main/resources/db/migration:/flyway/sql:ro
+      - ./infra/db/dev:/flyway/dev:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api-interna:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: interna
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_INTERNA: ${DB_PASSWORD_INTERNA}
+      JWT_SECRETO: ${JWT_SECRETO}
+    volumes:
+      - evidencias:/data/evidencias
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  api-publica:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: publica
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_PUBLICA: ${DB_PASSWORD_PUBLICA}
+      REDIS_HOST: redis
+    deploy:
+      replicas: 2
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  analitica:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: analitica
+      DB_URL: jdbc:postgresql://db:5432/biohub
+      DB_PASSWORD_ANALITICA: ${DB_PASSWORD_ANALITICA}
+      # HU-19: por defecto el día 1 a las 2:00 a. m. Para la demostración: "0 * * * * *" (cada minuto)
+      BIOHUB_ANALITICA_CRON_MENSUAL: ${BIOHUB_ANALITICA_CRON_MENSUAL:-0 0 2 1 * *}
+    # HU-19 (ASR-6): contenedor aparte con su propio límite de CPU y memoria,
+    # así el cálculo no le quita recursos a la api-interna ni a la api-pública
+    cpus: "1.0"
+    mem_limit: 768m
+    depends_on:
+      migraciones:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27
+    ports:
+      - "8080:80"
+    volumes:
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/nginx/limites:/etc/nginx/limites:ro
+    depends_on:
+      - api-interna
+      - api-publica
+    restart: unless-stopped    
+
+volumes:
+  datos-db:
+  evidencias:

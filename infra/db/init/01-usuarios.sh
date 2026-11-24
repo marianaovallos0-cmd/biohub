@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<EOSQL
+  CREATE ROLE biohub_interna   LOGIN PASSWORD '$DB_PASSWORD_INTERNA';
+  CREATE ROLE biohub_publica   LOGIN PASSWORD '$DB_PASSWORD_PUBLICA';
+  CREATE ROLE biohub_analitica LOGIN PASSWORD '$DB_PASSWORD_ANALITICA';
+EOSQL

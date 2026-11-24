@@ -1,0 +1,18 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    username: ${DB_USER_ANALITICA:biohub_analitica}
+    password: ${DB_PASSWORD_ANALITICA}
+    # HU-19 (ASR-6): la analítica usa pocas conexiones para no quitárselas al registro ni a la consulta,
+    # y se identifica en PostgreSQL (pg_stat_activity) para verla en la demostración
+    hikari:
+      maximum-pool-size: 2
+      minimum-idle: 1
+      data-source-properties:
+        ApplicationName: biohub-analitica
+
+biohub:
+  analitica:
+    cron-mensual: ${BIOHUB_ANALITICA_CRON_MENSUAL:0 0 2 1 * *}

@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/jetbrains-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    /* Fuentes del mockup */
+    --font-heading: 'Bricolage Grotesque Variable', sans-serif;
+    --font-sans: 'DM Sans Variable', sans-serif;
+    --font-mono: 'JetBrains Mono Variable', monospace;
+
+    --color-bosque: var(--bosque);
+    --color-brote: var(--brote);
+    --color-helecho: var(--helecho);
+    --color-ambar: var(--ambar);
+    --color-ambar-foreground: var(--ambar-foreground);
+    --color-exito: var(--exito);
+    --color-exito-foreground: var(--exito-foreground);
+
+   --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    /* Paleta BioHub (la de la hoja de componentes del mockup) */
+    --bosque: #163A2B;
+    --brote: #C9E86F;
+    --helecho: #9CC98F;
+    --ambar: #FDF1D8;
+    --ambar-foreground: #6E4708;
+    --exito: #E3F1D0;
+    --exito-foreground: #2E5410;
+
+    --background: #EEF4EC;
+    --foreground: #1B2A22;
+    --card: #FFFFFF;
+    --card-foreground: #1B2A22;
+    --popover: #FFFFFF;
+    --popover-foreground: #1B2A22;
+    --primary: #2F6B4A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #E3EEDD;
+    --secondary-foreground: #163A2B;
+    --muted: #F4F7F2;
+    --muted-foreground: #55665B;
+    --accent: #E3F1D0;
+    --accent-foreground: #163A2B;
+    --destructive: #B42318;
+    --border: #D6E2D3;
+    --input: #D6E2D3;
+    --ring: #2F6B4A;
+    --chart-1: #2F6B4A;
+    --chart-2: #5FA35A;
+    --chart-3: #9CC98F;
+    --chart-4: #C9E86F;
+    --chart-5: #163A2B;
+    --radius: 0.875rem;
+
+    --sidebar: #163A2B;
+    --sidebar-foreground: #D4E5D6;
+    --sidebar-primary: #C9E86F;
+    --sidebar-primary-foreground: #163A2B;
+    --sidebar-accent: rgb(201 232 111 / 16%);
+    --sidebar-accent-foreground: #C9E86F;
+    --sidebar-border: rgb(255 255 255 / 8%);
+    --sidebar-ring: #C9E86F;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3 {
+    @apply font-heading;
+  }
+}

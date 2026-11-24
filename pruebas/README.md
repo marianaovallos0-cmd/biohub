@@ -37,7 +37,7 @@ Una ficha pasa de 1 a 70 visitas por segundo y 1000 usuarios buscan al mismo tie
 
 ## HU-16: 500 consumidores externos
 
-500 consumidores, cada uno con su clave, piden datos al tiempo. La respuesta debe llegar en menos de 2 s y sin coordenadas. Al mismo tiempo se comprueba que una ruta no habilitada responde 403 y una clave falsa responde 401.
+500 consumidores, cada uno con su clave, piden datos al tiempo. La respuesta debe llegar en menos de 2 s y sin coordenadas. Antes de la carga se comprueba que una ruta no habilitada responde 403 y una clave falsa responde 401.
 
 ## HU-17: límite de peticiones
 

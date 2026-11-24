@@ -1,0 +1,149 @@
+{
+    "metrics": {
+        "http_req_receiving": {
+            "p(95)": 0.489617,
+            "avg": 0.3985605537190083,
+            "min": 0.019601,
+            "med": 0.125509,
+            "max": 11.799091,
+            "p(90)": 0.369512
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 80.27837869879522,
+            "min": 10.035079,
+            "med": 72.597357,
+            "max": 207.766889,
+            "p(90)": 140.2451706,
+            "p(95)": 166.85043799999985
+        },
+        "data_sent": {
+            "count": 13720,
+            "rate": 685.5451461427864
+        },
+        "iterations": {
+            "count": 121,
+            "rate": 6.045988533766557
+        },
+        "iteration_duration": {
+            "p(95)": 159.377885,
+            "avg": 57.998906256198346,
+            "min": 0.356526,
+            "med": 55.53654,
+            "max": 232.79932,
+            "p(90)": 140.392166
+        },
+        "vus": {
+            "min": 0,
+            "max": 5,
+            "value": 0
+        },
+        "checks{scenario:universidad}": {
+            "passes": 21,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_req_sending": {
+            "max": 11.27504,
+            "p(90)": 0.068506,
+            "p(95)": 0.112408,
+            "avg": 0.13148047933884296,
+            "min": 0.008501,
+            "med": 0.023802
+        },
+        "data_received": {
+            "count": 323119,
+            "rate": 16145.237760678645
+        },
+        "rechazos_ong": {
+            "count": 38,
+            "rate": 1.8987402006870178,
+            "thresholds": {
+                "count>0": false
+            }
+        },
+        "checks": {
+            "passes": 21,
+            "fails": 0,
+            "value": 1
+        },
+        "http_req_blocked": {
+            "med": 0.006701,
+            "max": 25.390142,
+            "p(90)": 0.026502,
+            "p(95)": 2.44148,
+            "avg": 1.2576237933884284,
+            "min": 0.003
+        },
+        "vus_max": {
+            "value": 10,
+            "min": 10,
+            "max": 10
+        },
+        "http_req_failed": {
+            "passes": 38,
+            "fails": 83,
+            "value": 0.3140495867768595
+        },
+        "rechazos_universidad": {
+            "count": 0,
+            "rate": 0,
+            "thresholds": {
+                "count==0": false
+            }
+        },
+        "http_req_connecting": {
+            "max": 1.89904,
+            "p(90)": 0,
+            "p(95)": 0.196007,
+            "avg": 0.04390753719008265,
+            "min": 0,
+            "med": 0
+        },
+        "http_reqs": {
+            "count": 121,
+            "rate": 6.045988533766557
+        },
+        "http_req_tls_handshaking": {
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0
+        },
+        "http_req_duration": {
+            "avg": 55.72319463636366,
+            "min": 0.226817,
+            "med": 50.554269,
+            "max": 207.766889,
+            "p(90)": 133.917241,
+            "p(95)": 148.285977
+        },
+        "http_req_waiting": {
+            "med": 50.382056,
+            "max": 207.364477,
+            "p(90)": 133.759736,
+            "p(95)": 148.133766,
+            "avg": 55.19315360330575,
+            "min": 0.178714
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "la universidad recibe 200": {
+                    "id": "ce81b193d91468ff259554d81404a358",
+                    "passes": 21,
+                    "fails": 0,
+                    "name": "la universidad recibe 200",
+                    "path": "::la universidad recibe 200"
+                }
+            }
+    }
+}

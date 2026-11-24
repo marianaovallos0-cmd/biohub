@@ -7,9 +7,9 @@
 ## Cómo se hizo
 
 - Todo BioHub corriendo con `docker compose`, con las **2 réplicas** de la api-pública detrás de Nginx y Redis como caché.
-- Base de datos con **10.011 hallazgos**: los 11 de los datos de prueba más los 10.000 de `datos-10000.sql`.
+- Base de datos con **10.011 hallazgos**: los 11 de los datos de prueba más los 10.000 de `datos/datos-10000.sql`.
 - k6 2.3.0 en un contenedor conectado a la red de BioHub, entrando por Nginx como un usuario real.
-- Script: [`hu11-pico-consulta.js`](hu11-pico-consulta.js). Tres escenarios al mismo tiempo durante 2 minutos:
+- Script: [`hu11-pico-consulta.js`](../../k6/hu11-pico-consulta.js). Tres escenarios al mismo tiempo durante 2 minutos:
 
 | Escenario | Qué simula |
 |---|---|
@@ -40,9 +40,9 @@
 
 ## Evidencia
 
-- [`resultados/hu11-salida.txt`](resultados/hu11-salida.txt): la salida completa de k6.
-- [`resultados/hu11-resumen.json`](resultados/hu11-resumen.json): todos los números en JSON.
+- [`salida.txt`](salida.txt): la salida completa de k6.
+- [`resumen.json`](resumen.json): todos los números en JSON.
 
 ## Cómo repetirla
 
-Ver la sección **Prueba de carga (HU-11)** del [README](../../README.md#prueba-de-carga-hu-11).
+Ver la sección **HU-11** de [`pruebas/README.md`](../../README.md#hu-11-pico-de-consulta-pública).

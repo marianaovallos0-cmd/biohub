@@ -3,7 +3,7 @@
 //   busqueda      -> hasta 1000 usuarios simultáneos buscando especies (criterio 3)
 //   ficha_noticia -> una ficha pasa de 1 a 70 visitas por segundo, más de 60 veces (criterio 1)
 //   registro      -> un investigador registra un hallazgo cada 5 segundos mientras tanto (criterio 2)
-// La base debe tener los 10.000 registros de datos-10000.sql (criterio 4).
+// La base debe tener los 10.000 registros de datos/datos-10000.sql (criterio 4).
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 

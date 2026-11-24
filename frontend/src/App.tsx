@@ -23,14 +23,14 @@ export default function App() {
     <SesionProvider>
       <BrowserRouter>
         <Routes>
-          {/* Zona pública: sin login (api-pública). Aquí van las páginas de HU-09 y HU-10 */}
+          {/* Zona pública: sin login (api-pública), HU-09 y HU-10 */}
           <Route element={<LayoutPublico />}>
             <Route path="/" element={<BusquedaPublica />} />
             <Route path="/fichas/:hallazgoId" element={<FichaPublica />} />
             <Route path="/login" element={<Login />} />
           </Route>
 
-          {/* Zona interna: con login (api-interna). Cada HU agrega su página aquí */}
+          {/* Zona interna: con login (api-interna) */}
           <Route element={<RutaProtegida />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno" element={<InicioInterno />} />

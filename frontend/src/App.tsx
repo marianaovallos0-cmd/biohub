@@ -13,6 +13,7 @@ import MisHallazgos from '@/paginas/MisHallazgos';
 import TiposEspecie from '@/paginas/TiposEspecie';
 import Reportes from '@/paginas/Reportes';
 import UsuariosRoles from '@/paginas/UsuariosRoles';
+import MapaUbicaciones from '@/paginas/MapaUbicaciones';
 import EquiposCampo from '@/paginas/EquiposCampo';
 import HallazgosAuditoria from '@/paginas/HallazgosAuditoria';
 import HistorialHallazgo from '@/paginas/HistorialHallazgo';
@@ -33,6 +34,8 @@ export default function App() {
           <Route element={<RutaProtegida />}>
             <Route element={<LayoutInterno />}>
               <Route path="/interno" element={<InicioInterno />} />
+              {/* HU-13: cualquiera con sesión entra; solo alto rango recibe coordenadas */}
+              <Route path="/interno/ubicaciones" element={<MapaUbicaciones />} />
             </Route>
           </Route>
 

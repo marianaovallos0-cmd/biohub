@@ -22,7 +22,7 @@ const MENU: Record<Rol, ItemMenu[]> = {
     { ruta: '/interno/intentos', texto: 'Intentos de acceso', icono: ShieldAlert },
   ],
   DIRECTOR: [{ ruta: '/interno/reportes', texto: 'Reportes', icono: ChartColumn }],
-  ALTO_RANGO: [{ ruta: '/interno/hallazgos', texto: 'Hallazgos', icono: Leaf }],
+  ALTO_RANGO: [{ ruta: '/interno/ubicaciones', texto: 'Mapa de hallazgos', icono: Leaf }],
   ADMINISTRADOR: [
     { ruta: '/interno/usuarios', texto: 'Usuarios y roles', icono: Users },
     { ruta: '/interno/equipos', texto: 'Equipos de campo', icono: Camera },

@@ -1,3 +1,7 @@
+// HU-17: límite de peticiones por consumidor externo.
+//   ong         -> la ONG (60 por minuto) hace 100 peticiones seguidas: las que pasan el límite reciben 429.
+//   universidad -> al mismo tiempo, la universidad (120 por minuto) pide 1 por segundo y no la frenan.
+// Así se ve que un consumidor que se pasa del límite no afecta a los demás.
 import http from 'k6/http';
 import { check } from 'k6';
 import { Counter } from 'k6/metrics';

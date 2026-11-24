@@ -5,9 +5,7 @@
 // En setup el director pide 12 reportes de una vez: cada pedido debe responder de inmediato,
 // sin esperar el cálculo (criterio 3). La analítica los calcula en segundo plano en el siguiente minuto.
 //
-// Cómo correrlo (con BioHub arriba y, para más carga, los 10.000 registros de datos-10000.sql):
-//   docker run --rm -i --network biohub_default -e BASE=http://nginx \
-//     -v "$PWD/pruebas/k6:/scripts" grafana/k6 run /scripts/hu19-analitica-concurrente.js
+// Para más carga, conviene tener los 10.000 registros de datos/datos-10000.sql.
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { buscar, registrar } from './hu11-pico-consulta.js';
@@ -37,6 +35,8 @@ export const options = {
     'checks{scenario:registro}': ['rate==1'],
     // Criterio 3: pedir un reporte no bloquea al director
     'http_req_duration{name:pedir_reporte}': ['max<1000'],
+    // Si la analítica no genera los reportes, la prueba falla
+    'checks{name:reportes_generados}': ['rate==1'],
   },
 };
 
@@ -85,5 +85,5 @@ export function teardown(datos) {
   const reportes = r.json() || [];
   const generados = reportes.filter((x) => x.generado).length;
   console.log(`Reportes generados por la analítica: ${generados} de ${reportes.length}`);
-  check(r, { 'la analítica generó los reportes': () => generados >= 12 });
+  check(r, { 'la analítica generó los reportes': () => generados >= 12 }, { name: 'reportes_generados' });
 }

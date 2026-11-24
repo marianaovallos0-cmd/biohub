@@ -1,7 +1,7 @@
 -- =========================================================
 -- HU-11: carga 10.000 hallazgos de prueba para la prueba de carga.
 -- SOLO para desarrollo. No se carga solo: se corre a mano antes de la prueba.
--- Todos llevan la expedición 'Carga HU-11' para reconocerlos y borrarlos.
+-- Llevan la expedición 'Carga HU-11'. También se borran los 'Prueba HU-11' que crean las pruebas k6.
 -- Si se corre dos veces, primero borra la carga anterior.
 -- =========================================================
 BEGIN;
@@ -10,10 +10,10 @@ BEGIN;
 DELETE FROM valor_atributo
  WHERE ficha_id IN (SELECT f.id FROM ficha_taxonomica f
                       JOIN hallazgo h ON h.id = f.hallazgo_id
-                     WHERE h.expedicion = 'Carga HU-11');
-DELETE FROM ficha_taxonomica WHERE hallazgo_id IN (SELECT id FROM hallazgo WHERE expedicion = 'Carga HU-11');
-DELETE FROM ubicacion        WHERE hallazgo_id IN (SELECT id FROM hallazgo WHERE expedicion = 'Carga HU-11');
-DELETE FROM hallazgo         WHERE expedicion = 'Carga HU-11';
+                     WHERE h.expedicion IN ('Carga HU-11', 'Prueba HU-11'));
+DELETE FROM ficha_taxonomica WHERE hallazgo_id IN (SELECT id FROM hallazgo WHERE expedicion IN ('Carga HU-11', 'Prueba HU-11'));
+DELETE FROM ubicacion        WHERE hallazgo_id IN (SELECT id FROM hallazgo WHERE expedicion IN ('Carga HU-11', 'Prueba HU-11'));
+DELETE FROM hallazgo         WHERE expedicion IN ('Carga HU-11', 'Prueba HU-11');
 
 -- 2. Las 8 especies que se van a repetir, con su lugar
 --    Tipo 1 = Anfibio, tipo 2 = Ave (los de R__datos_prueba.sql)

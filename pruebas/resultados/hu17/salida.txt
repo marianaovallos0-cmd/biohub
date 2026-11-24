@@ -1,0 +1,144 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /pruebas/k6/hu17-limite.js
+        output: -
+
+     scenarios: (100.00%) 2 scenarios, 10 max VUs, 10m30s max duration (incl. graceful stop):
+              * ong: 100 iterations shared among 5 VUs (maxDuration: 10m0s, exec: ong, gracefulStop: 30s)
+              * universidad: 1.00 iterations/s for 20s (maxVUs: 5, exec: universidad, gracefulStop: 30s)
+
+
+running (00m01.0s), 05/10 VUs, 47 complete and 0 interrupted iterations
+ong           [  46% ] 5 VUs    00m01.0s/10m0s  046/100 shared iters
+universidad   [   5% ] 0/5 VUs  01.0s/20s       1.00 iters/s
+
+running (00m02.0s), 00/10 VUs, 102 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  10% ] 0/5 VUs  02.0s/20s       1.00 iters/s
+
+running (00m03.0s), 00/10 VUs, 103 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  15% ] 0/5 VUs  03.0s/20s       1.00 iters/s
+
+running (00m04.0s), 00/10 VUs, 104 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  20% ] 0/5 VUs  04.0s/20s       1.00 iters/s
+
+running (00m05.0s), 00/10 VUs, 105 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  25% ] 0/5 VUs  05.0s/20s       1.00 iters/s
+
+running (00m06.0s), 00/10 VUs, 106 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  30% ] 0/5 VUs  06.0s/20s       1.00 iters/s
+
+running (00m07.0s), 00/10 VUs, 107 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  35% ] 0/5 VUs  07.0s/20s       1.00 iters/s
+
+running (00m08.0s), 00/10 VUs, 108 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  40% ] 0/5 VUs  08.0s/20s       1.00 iters/s
+
+running (00m09.0s), 00/10 VUs, 109 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  45% ] 0/5 VUs  09.0s/20s       1.00 iters/s
+
+running (00m10.0s), 00/10 VUs, 110 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  50% ] 0/5 VUs  10.0s/20s       1.00 iters/s
+
+running (00m11.0s), 00/10 VUs, 111 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  55% ] 0/5 VUs  11.0s/20s       1.00 iters/s
+
+running (00m12.0s), 00/10 VUs, 112 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  60% ] 0/5 VUs  12.0s/20s       1.00 iters/s
+
+running (00m13.0s), 00/10 VUs, 113 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  65% ] 0/5 VUs  13.0s/20s       1.00 iters/s
+
+running (00m14.0s), 00/10 VUs, 114 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  70% ] 0/5 VUs  14.0s/20s       1.00 iters/s
+
+running (00m15.0s), 00/10 VUs, 115 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  75% ] 0/5 VUs  15.0s/20s       1.00 iters/s
+
+running (00m16.0s), 00/10 VUs, 116 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  80% ] 0/5 VUs  16.0s/20s       1.00 iters/s
+
+running (00m17.0s), 00/10 VUs, 117 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  85% ] 0/5 VUs  17.0s/20s       1.00 iters/s
+
+running (00m18.0s), 00/10 VUs, 118 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  90% ] 0/5 VUs  18.0s/20s       1.00 iters/s
+
+running (00m19.0s), 00/10 VUs, 119 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [  95% ] 0/5 VUs  19.0s/20s       1.00 iters/s
+
+running (00m20.0s), 00/10 VUs, 120 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad   [ 100% ] 0/5 VUs  20.0s/20s       1.00 iters/s
+
+
+  █ THRESHOLDS 
+
+    checks{scenario:universidad}
+    ✓ 'rate==1' rate=100.00%
+
+    rechazos_ong
+    ✓ 'count>0' count=38
+
+    rechazos_universidad
+    ✓ 'count==0' count=0
+
+
+  █ TOTAL RESULTS 
+
+    checks_total.......: 21      1.049304/s
+    checks_succeeded...: 100.00% 21 out of 21
+    checks_failed......: 0.00%   0 out of 21
+
+    ✓ la universidad recibe 200
+
+    CUSTOM
+    rechazos_ong...................: 38     1.89874/s
+    rechazos_universidad...........: 0      0/s
+
+    HTTP
+    http_req_duration..............: avg=55.72ms min=226.81µs med=50.55ms max=207.76ms p(90)=133.91ms p(95)=148.28ms
+      { expected_response:true }...: avg=80.27ms min=10.03ms  med=72.59ms max=207.76ms p(90)=140.24ms p(95)=166.85ms
+    http_req_failed................: 31.40% 38 out of 121
+    http_reqs......................: 121    6.045989/s
+
+    EXECUTION
+    iteration_duration.............: avg=57.99ms min=356.52µs med=55.53ms max=232.79ms p(90)=140.39ms p(95)=159.37ms
+    iterations.....................: 121    6.045989/s
+    vus............................: 0      min=0         max=5 
+    vus_max........................: 10     min=10        max=10
+
+    NETWORK
+    data_received..................: 323 kB 16 kB/s
+    data_sent......................: 14 kB  686 B/s
+
+
+
+
+running (00m20.0s), 00/10 VUs, 121 complete and 0 interrupted iterations
+ong         ✓ [ 100% ] 5 VUs    00m01.3s/10m0s  100/100 shared iters
+universidad ✓ [ 100% ] 0/5 VUs  20s             1.00 iters/s
